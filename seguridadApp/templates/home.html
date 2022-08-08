@@ -1,19 +1,8 @@
 {% extends "plantilla.html" %}
-{% block title %} Bienvenido {% endblock title %}
-{% block userLogged %} {{userLogged}} {% endblock userLogged %}
+{% block title %} Boutique | Home {% endblock title %}
 {% block titleContent %} Bienvenido {{userLogged}} {% endblock titleContent %}
 
 {% block content %}
 
 {% endblock%} 
 
-{% block js %}
-<script>
-    {% if userLogged %}    
-        localStorage.setItem('token', "{{userLogged}}");
-    {% endif %}
-
-    let user_name = localStorage.getItem('token');
-    console.log(user_name)
-</script>
-{% endblock%} 

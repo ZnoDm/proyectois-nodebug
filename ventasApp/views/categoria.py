@@ -2,7 +2,7 @@ from pydoc import describe
 from django.shortcuts import render,redirect 
 from ventasApp.models import Categoria 
 from django.db.models import Q 
-from .forms import CategoriaForm
+from ventasApp.forms import CategoriaForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 # Create your views here.
@@ -18,6 +18,7 @@ def agregarcategoria(request):
                 context={'form':form}
                 return render(request,"categoria/agregar.html",context) 
             else:
+                messages.success(request, "Categoria registrada.")
                 form.save() 
                 return redirect("listarcategoria") 
 
@@ -29,9 +30,9 @@ def agregarcategoria(request):
 def listarcategoria(request):
     
     queryset = request.GET.get("buscar")
-    categoria = Categoria.objects.all().order_by('-idCategoria').values()
+    categoria = Categoria.objects.all().filter(eliminado=False).order_by('-idCategoria').values()
     if queryset:
-        categoria=Categoria.objects.filter(Q(descripcion__icontains=queryset)).distinct().order_by('-idCategoria').values() 
+        categoria=Categoria.objects.filter(Q(descripcion__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idCategoria').values() 
     paginator = Paginator(categoria, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -43,6 +44,8 @@ def editarcategoria(request,id):
     if request.method=="POST":
         form=CategoriaForm(request.POST,instance=categoria)
         if form.is_valid():
+            messages.success(request, "Categoria actualizada.")
+            form.usuarioModificacion = request.session['user_logged']
             form.save() 
             return redirect("listarcategoria") 
     else:

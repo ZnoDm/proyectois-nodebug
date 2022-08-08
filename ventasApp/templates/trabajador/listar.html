@@ -1,15 +1,15 @@
 {% extends "plantilla.html" %}
-{% block title %} Boutique | Categoria {% endblock title %}
+{% block title %} Boutique | Trabajador {% endblock title %}
 
 {% block content %}
     <div class="container">
         <div class="card mt-3">
         <div class="card-header d-flex justify-content-between p-3">
             <div>
-                <h1 class="card-title align-items-center">LISTADO DE CATEGORIAS</h1>
+                <h1 class="card-title align-items-center">LISTADO DE TRABAJADORES</h1>
             </div>
             <div class="ml-auto">
-                <a href="{% url 'agregarcategoria' %}" class='btn btn-sm btn-primary'>
+                <a href="{% url 'agregartrabajador' %}" class='btn btn-sm btn-primary'>
                     <i class='fas fa-plus'></i> NUEVO
                 </a>
             </div>
@@ -31,31 +31,37 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Id</th>
-                        <th>Descripción</th>
+                        <th>Apellidos y Nombres</th>
+                        <th>Direccion</th>
+                        <th>Email</th>
+                        <th>Sexo</th>
                         <th>Activo</th>
                         <th><center>Opciones</center></th>
                     </tr>
                 </thead>
                 {% if page_obj %}
-                {% for itemcategoria in page_obj %}
+                {% for itemtrabajador in page_obj %}
                 <tr>
-                    <td>{{ itemcategoria.idCategoria}}</td>
-                    <td>{{ itemcategoria.descripcion }}</td>
+                    <td>{{ itemtrabajador.idTrabajador}}</td>
+                    <td>{{ itemtrabajador.apellidos }} {{ itemtrabajador.nombres }}</td>
+                    <td>{{ itemtrabajador.direccion }}</td>
+                    <td>{{ itemtrabajador.email }}</td>
+                    <td>{{ itemtrabajador.sexo}}</td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox" onclick="activarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.activo}}')" {% if itemcategoria.activo %} checked {% endif %} >
+                            <input type="checkbox" onclick="activarTrabajador('{{itemtrabajador.idTrabajador}}','{{itemtrabajador.activo}}')" {% if itemtrabajador.activo %} checked {% endif %} >
                             <span class="slider round"></span>
                         </label>
                     </td>
                     <td style="text-align: center;">
-                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href="#" onclick="eliminarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        <a href="{% url 'editartrabajador' itemtrabajador.idTrabajador %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="#" onclick="eliminarTrabajador('{{itemtrabajador.idTrabajador}}','{{itemtrabajador.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr style="text-align: center;">
-                    <td colspan="4">
+                    <td colspan="7">
                         <p>No hay Registros</p>
                     </td>
                 </tr>
@@ -109,7 +115,7 @@
     {% endfor %}
     {% endif %}
     <script>
-        function eliminarCategoria(id,descripcion){
+        function eliminarTrabajador(id,descripcion){
             Swal.fire({ "title":"¿Realmente desea eliminar Registro?",
             "text":"Código :"+ id + " - Descripción :" + descripcion,
             "icon":"question",
@@ -119,17 +125,17 @@
             "reverseButton":true,
             "confirmButtonColor":"#dc3545"
             }).then(function(result){ if(result.isConfirmed){
-                window.location.replace(window.location.origin+"/categoria/delete/"+id+"/") }
+                window.location.replace(window.location.origin+"/trabajador/delete/"+id+"/") }
         });
         }
 
-        function activarCategoria(id,activo){
+        function activarTrabajador(id,activo){
             let estado;
             if(activo=='False')
                 estado=0
             else
                 estado=1
-                window.location.replace(window.location.origin+"/categoria/active/"+id+"/"+ estado +"/")
+                window.location.replace(window.location.origin+"/trabajador/active/"+id+"/"+ estado +"/") 
         };
 </script>
 {% endblock js %} 

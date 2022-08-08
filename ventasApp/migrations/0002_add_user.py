@@ -8,6 +8,8 @@ def add_user(apps, schema_editor):
     user = User.objects.create_user('admin', 'admin@mail.com', '123')
     user.is_superuser = 1
     user.is_staff = 1
+    user.first_name = 'Nelson'
+    user.last_name = 'Angeles'
     user.save()
 
 class Migration(migrations.Migration):

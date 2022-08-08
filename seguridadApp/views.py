@@ -17,8 +17,8 @@ def acceder(request):
             password=form.cleaned_data.get("password")
             usuario=authenticate(username=nombre_usuario, password=password)
             if usuario is not None:
-                login(request, usuario)
-                request.session['user_logged'] = nombre_usuario
+                login(request, usuario)              
+                request.session['user_logged'] = usuario.first_name + ' '+ usuario.last_name
                 return redirect("home")
             else:
                 messages.error(request, "Datos incorrecto.")
@@ -34,7 +34,6 @@ def acceder(request):
     return render(request, "login.html", {"form": form})
 
 def home(request):
-    context={}
     return render(request, "home.html",{'userLogged':request.session['user_logged']})
 
 def salir(request):    

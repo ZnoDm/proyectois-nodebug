@@ -17,9 +17,6 @@ from django.contrib import admin
 from django.urls import path,include
 
 from seguridadApp.views import acceder,home,salir
-from django.contrib.auth import views
-
-from ventasApp.views import listarcategoria,agregarcategoria,editarcategoria,eliminarcategoria,activarcategoria
 
 urlpatterns = [
     path('', acceder, name='login'),
@@ -28,9 +25,7 @@ urlpatterns = [
     
     path('admin/', admin.site.urls),
 
-    path('listacategoria/',listarcategoria,name="listarcategoria"),
-    path('agregarcategoria/',agregarcategoria ,name="agregarcategoria"),
-    path('editarcategoria/<int:id>/',editarcategoria ,name="editarcategoria"),
-    path('eliminarcategoria/<int:id>/',eliminarcategoria,name="eliminarcategoria"), 
-    path('activarcategoria/<int:id>/<int:activo>/',activarcategoria,name="activarcategoria"), 
+    path('categoria/', include('ventasApp.routes.categoria'),name="categoria"),
+    path('cliente/', include('ventasApp.routes.cliente'),name="cliente"),
+    path('trabajador/', include('ventasApp.routes.trabajador'),name="trabajador"),
 ]

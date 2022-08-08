@@ -20,9 +20,9 @@ class Trabajador(models.Model):
 
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=100)
-    direccion = models.CharField(max_length=150)
+    direccion = models.CharField(max_length=150,blank=True, null=True)
     email = models.EmailField()
-    telefono = models.CharField(max_length=8)
+    telefono = models.CharField(max_length=8,blank=True, null=True)
     
     sexo = models.CharField(max_length=1, choices=SEXO, default=MASCULINO)
 
@@ -235,7 +235,6 @@ class DetallePedidoVenta(models.Model):
     idDetallePedidoVenta = models.AutoField(primary_key=True)
     pedidoVenta = models.ForeignKey(PedidoVenta, on_delete = models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
-
     cantidad = models.IntegerField()
     precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
     descuentoUnitario = models.DecimalField(max_digits=3,decimal_places=3)
