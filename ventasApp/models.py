@@ -56,7 +56,7 @@ class TipoCliente(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.descripcion
 
 
 #========= VISTA TIPO DOCUMENTO =========
@@ -141,12 +141,13 @@ class Categoria(models.Model):
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
     fechaEliminacion = models.DateField(blank=True, null=True)
+
     def __str__(self):
         return self
 
 class Producto(models.Model):
     idProducto = models.AutoField(primary_key=True)
-    categoria = models.ForeignKey(Categoria, on_delete = models.CASCADE)
+    categoria=models.ForeignKey(Categoria, on_delete=models.CASCADE)
     codigo = models.CharField(max_length=10)
 
     nombre = models.CharField(max_length=100)
@@ -262,7 +263,10 @@ class Proveedor(models.Model):
     email = models.EmailField()
     telefono = models.CharField(max_length=8)
 
+    activo = models.BooleanField(default= True)
+
     eliminado = models.BooleanField(default= False)
+
     usuarioRegistro = models.CharField(max_length=300)
     fechaRegistro = models.DateField()
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)

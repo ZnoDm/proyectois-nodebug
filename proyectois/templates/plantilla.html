@@ -85,9 +85,28 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-header">ACCESOS</li>
         <li class="nav-item">
           <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="../../index.html" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Dashboard v1</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-header">ACCESOS</li>
+        
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Usuarios
             </p>
@@ -95,6 +114,7 @@
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Roles
             </p>
@@ -102,6 +122,7 @@
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Permisos
             </p>
@@ -109,6 +130,7 @@
         </li>
         <li class="nav-item">
           <a href="{% url 'listartrabajador' %}" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Trabajadores
             </p>
@@ -118,7 +140,7 @@
         <li class="nav-header">REGISTROS</li>
         <li class="nav-item">
           <a href="{% url 'listarcategoria' %}" class="nav-link">
-            
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Categorias
             </p>
@@ -126,39 +148,39 @@
         </li>
         <li class="nav-item">
           <a href="{% url 'listarcliente' %}" class="nav-link">
-            
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Clientes
             </p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{% url 'listarcategoria' %}" class="nav-link">
-            
+          <a href="{% url 'listarformaPago' %}" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Formas de Pago
             </p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{% url 'listarcategoria' %}" class="nav-link">
-            
+          <a href="{% url 'listarproducto' %}" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Productos
             </p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{% url 'listarcategoria' %}" class="nav-link">
-            
+          <a href="{% url 'listarproveedor' %}" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Proveedores
             </p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{% url 'listarcategoria' %}" class="nav-link">
-            
+          <a href="{% url 'listartipoCliente' %}" class="nav-link">
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Tipo Cliente
             </p>
@@ -170,7 +192,7 @@
         
         <li class="nav-item">
           <a href="{% url 'listarcategoria' %}" class="nav-link">
-            
+            <i class="nav-icon fas fa-box-open"></i>
             <p>
               Pedido Venta
             </p>

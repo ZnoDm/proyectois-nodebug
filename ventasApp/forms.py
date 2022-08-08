@@ -32,6 +32,68 @@ class ClienteForm(forms.ModelForm):
             'usuarioRegistro',
             'fechaRegistro',
             ]
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+class FormaPagoForm(forms.ModelForm):
+    class Meta:
+        model=FormaPago
+        fields=[
+            'idFormaPago',
+            'descripcion',
+            'nroCuotas',
+            'frecuencia',
+            'interes',
+            'activo',
+            'usuarioRegistro',
+            'fechaRegistro',
+            ]
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model=Producto
+        fields=[
+            'codigo',
+            'categoria',      
+            'nombre',
+            'descripcion',
+            'marca',
+            'modelo',
+            'stock',
+            'precioUnitario',
+            'urlImagen',
+            'nombreImagen',
+            'fechaCargaImagen',
+            'activo',
+            'usuarioRegistro',
+            'fechaRegistro',
+            ]
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+
+
+class ProveedorForm(forms.ModelForm):
+    class Meta:
+        model=Proveedor
+        fields=[
+            'ruc',
+            'razonSocial',
+            'nombreComercial',
+            'direccion',
+            'email',
+            'telefono',
+            'activo',
+            'usuarioRegistro',
+            'fechaRegistro',
+            ]
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+
+
 class TrabajadorForm(forms.ModelForm):
     class Meta:
         model = Trabajador
@@ -44,24 +106,24 @@ class TrabajadorForm(forms.ModelForm):
             'telefono',
             'sexo',
             'activo',
+            'usuarioRegistro',
+            'fechaRegistro',
             ]
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+
         
 class TipoClienteForm(forms.ModelForm):
     class Meta:
-        model=Categoria
+        model=TipoCliente
         fields=[
             'descripcion',
             'activo',
             'usuarioRegistro',
             'fechaRegistro',
             ]
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
 
-class ProductoForm(forms.ModelForm):
-    class Meta:
-        model=Categoria
-        fields=[
-            'descripcion',
-            'activo',
-            'usuarioRegistro',
-            'fechaRegistro',
-            ]

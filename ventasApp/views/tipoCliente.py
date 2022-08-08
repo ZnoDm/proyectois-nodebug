@@ -1,70 +1,71 @@
 from pydoc import describe
 from django.shortcuts import render,redirect 
-from ventasApp.models import Producto 
+from ventasApp.models import TipoCliente 
 from django.db.models import Q 
-from ventasApp.forms import CategoriaForm
+from ventasApp.forms import TipoClienteForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 # Create your views here.
-def agregarcategoria(request):
+def agregartipoCliente(request):
     if request.method=="POST":
-        form=CategoriaForm(request.POST)
+        form=TipoClienteForm(request.POST)
         if form.is_valid():
-            descripcion_categoria = form.cleaned_data.get("descripcion")
-            categoria_exits = (Producto.objects.filter(descripcion=descripcion_categoria).count()>0)
-            if categoria_exits:
-                messages.info(request, "Producto ya existe.")
-                form=CategoriaForm()
+            descripcion_tipoCliente = form.cleaned_data.get("descripcion")
+            tipoCliente_exits = (TipoCliente.objects.filter(descripcion=descripcion_tipoCliente).count()>0)
+            if tipoCliente_exits:
+                messages.info(request, "TipoCliente ya existe.")
+                form=TipoClienteForm()
                 context={'form':form}
-                return render(request,"producto/agregar.html",context) 
+                return render(request,"tipoCliente/agregar.html",context) 
             else:
-                messages.success(request, "Producto registrada.")
+                messages.success(request, "TipoCliente registrada.")
                 form.save() 
-                return redirect("listarcategoria") 
+                return redirect("listartipoCliente") 
 
     else:
-        form=CategoriaForm()
+        form=TipoClienteForm()
         context={'form':form} 
-        return render(request,"producto/agregar.html",context) 
+        return render(request,"tipoCliente/agregar.html",context) 
 
-def listarcategoria(request):
+def listartipoCliente(request):
     
     queryset = request.GET.get("buscar")
-    producto = Producto.objects.all().filter(eliminado=False).order_by('-idCategoria').values()
+    tipoCliente = TipoCliente.objects.all().filter(eliminado=False).order_by('-idTipoCliente').values()
     if queryset:
-        producto=Producto.objects.filter(Q(descripcion__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idCategoria').values() 
-    paginator = Paginator(producto, 3)
+        tipoCliente=TipoCliente.objects.filter(Q(descripcion__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idTipoCliente').values() 
+    paginator = Paginator(tipoCliente, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context={'producto':producto}
-    return render(request,"producto/listar.html",{'page_obj': page_obj})
+    context={'tipoCliente':tipoCliente}
+    return render(request,"tipoCliente/listar.html",{'page_obj': page_obj})
 
-def editarcategoria(request,id):
-    producto=Producto.objects.get(idCategoria=id)
+def editartipoCliente(request,id):
+    tipoCliente=TipoCliente.objects.get(idTipoCliente=id)
     if request.method=="POST":
-        form=CategoriaForm(request.POST,instance=producto)
+        form=TipoClienteForm(request.POST,instance=tipoCliente)
         if form.is_valid():
+            messages.success(request, "Cliente actualizado.")
             form.save() 
-            return redirect("listarcategoria") 
+            return redirect("listartipoCliente") 
     else:
-        form=CategoriaForm(instance=producto)
+        form=TipoClienteForm(instance=tipoCliente)
         context={"form":form} 
-        return render(request,"producto/edit.html",context)
+        return render(request,"tipoCliente/edit.html",context)
 
-def eliminarcategoria(request,id):
-    producto=Producto.objects.get(idCategoria=id) 
-    producto.activo=False
-    producto.eliminado=True
-    producto.save()
-    messages.success(request, "Producto eliminada.")
-    return redirect("listarcategoria")
+def eliminartipoCliente(request,id):
+    tipoCliente=TipoCliente.objects.get(idTipoCliente=id) 
+    tipoCliente.activo=False
+    tipoCliente.eliminado=True
+    tipoCliente.save()
+    messages.success(request, "TipoCliente eliminada.")
+    return redirect("listartipoCliente")
 
-def activarcategoria(request,id,activo):
-    producto=Producto.objects.get(idCategoria=id)
+def activartipoCliente(request,id,activo):
+    tipoCliente=TipoCliente.objects.get(idTipoCliente=id)
     if activo == 0:
-        producto.activo=True
+        tipoCliente.activo=True
     else:
-        producto.activo=False
-    producto.save()
-    messages.success(request, "Producto actualizada.")
-    return redirect("listarcategoria") 
+        tipoCliente.activo=False
+    tipoCliente.save()
+    messages.success(request, "TipoCliente actualizada.")
+    return redirect("listartipoCliente") 

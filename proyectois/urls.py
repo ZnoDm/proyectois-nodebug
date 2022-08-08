@@ -27,5 +27,9 @@ urlpatterns = [
 
     path('categoria/', include('ventasApp.routes.categoria'),name="categoria"),
     path('cliente/', include('ventasApp.routes.cliente'),name="cliente"),
+    path('formaPago/', include('ventasApp.routes.formaPago'),name="formaPago"),
+    path('producto/', include('ventasApp.routes.producto'),name="producto"),
+    path('proveedor/', include('ventasApp.routes.proveedor'),name="proveedor"),
+    path('tipoCliente/', include('ventasApp.routes.tipoCliente'),name="tipoCliente"),
     path('trabajador/', include('ventasApp.routes.trabajador'),name="trabajador"),
 ]

@@ -44,6 +44,7 @@ def editarcliente(request,id):
     if request.method=="POST":
         form=ClienteForm(request.POST,instance=cliente)
         if form.is_valid():
+            messages.success(request, "Cliente actualizado.")
             form.save() 
             return redirect("listarcliente") 
     else:
@@ -56,7 +57,7 @@ def eliminarcliente(request,id):
     cliente.activo=False
     cliente.eliminado=True
     cliente.save()
-    messages.success(request, "Cliente eliminada.")
+    messages.success(request, "Cliente eliminado.")
     return redirect("listarcliente")
 
 def activarcliente(request,id,activo):
@@ -66,5 +67,5 @@ def activarcliente(request,id,activo):
     else:
         cliente.activo=False
     cliente.save()
-    messages.success(request, "Cliente actualizada.")
+    messages.success(request, "Cliente actualizado.")
     return redirect("listarcliente") 

@@ -10,8 +10,8 @@ def agregarproveedor(request):
     if request.method=="POST":
         form=ProveedorForm(request.POST)
         if form.is_valid():
-            descripcion_proveedor = form.cleaned_data.get("descripcion")
-            proveedor_exits = (Proveedor.objects.filter(descripcion=descripcion_proveedor).count()>0)
+            ruc_proveedor = form.cleaned_data.get("ruc")
+            proveedor_exits = (Proveedor.objects.filter(ruc=ruc_proveedor).count()>0)
             if proveedor_exits:
                 messages.info(request, "Proveedor ya existe.")
                 form=ProveedorForm()
@@ -32,7 +32,7 @@ def listarproveedor(request):
     queryset = request.GET.get("buscar")
     proveedor = Proveedor.objects.all().filter(eliminado=False).order_by('-idProveedor').values()
     if queryset:
-        proveedor=Proveedor.objects.filter(Q(descripcion__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idProveedor').values() 
+        proveedor=Proveedor.objects.filter(Q(ruc__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idProveedor').values() 
     paginator = Paginator(proveedor, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

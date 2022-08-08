@@ -2,69 +2,70 @@ from pydoc import describe
 from django.shortcuts import render,redirect 
 from ventasApp.models import Producto 
 from django.db.models import Q 
-from ventasApp.forms import CategoriaForm
+from ventasApp.forms import ProductoForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 # Create your views here.
-def agregarcategoria(request):
+def agregarproducto(request):
     if request.method=="POST":
-        form=CategoriaForm(request.POST)
+        form=ProductoForm(request.POST)
         if form.is_valid():
-            descripcion_categoria = form.cleaned_data.get("descripcion")
-            categoria_exits = (Producto.objects.filter(descripcion=descripcion_categoria).count()>0)
-            if categoria_exits:
+            codigo_producto = form.cleaned_data.get("codigo")
+            producto_exits = (Producto.objects.filter(codigo=codigo_producto).count()>0)
+            if producto_exits:
                 messages.info(request, "Producto ya existe.")
-                form=CategoriaForm()
+                form=ProductoForm()
                 context={'form':form}
                 return render(request,"producto/agregar.html",context) 
             else:
                 messages.success(request, "Producto registrada.")
                 form.save() 
-                return redirect("listarcategoria") 
+                return redirect("listarproducto") 
 
     else:
-        form=CategoriaForm()
+        form=ProductoForm()
         context={'form':form} 
         return render(request,"producto/agregar.html",context) 
 
-def listarcategoria(request):
+def listarproducto(request):
     
     queryset = request.GET.get("buscar")
-    producto = Producto.objects.all().filter(eliminado=False).order_by('-idCategoria').values()
+    producto = Producto.objects.all().filter(eliminado=False).order_by('-idProducto').values()
     if queryset:
-        producto=Producto.objects.filter(Q(descripcion__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idCategoria').values() 
+        producto=Producto.objects.filter(Q(codigo__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idProducto').values() 
     paginator = Paginator(producto, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context={'producto':producto}
     return render(request,"producto/listar.html",{'page_obj': page_obj})
 
-def editarcategoria(request,id):
-    producto=Producto.objects.get(idCategoria=id)
+def editarproducto(request,id):
+    producto=Producto.objects.get(idProducto=id)
     if request.method=="POST":
-        form=CategoriaForm(request.POST,instance=producto)
+        form=ProductoForm(request.POST,instance=producto)
         if form.is_valid():
+            messages.success(request, "Producto actualizado.")
             form.save() 
-            return redirect("listarcategoria") 
+            return redirect("listarproducto") 
     else:
-        form=CategoriaForm(instance=producto)
+        form=ProductoForm(instance=producto)
         context={"form":form} 
         return render(request,"producto/edit.html",context)
 
-def eliminarcategoria(request,id):
-    producto=Producto.objects.get(idCategoria=id) 
+def eliminarproducto(request,id):
+    producto=Producto.objects.get(idProducto=id) 
     producto.activo=False
     producto.eliminado=True
     producto.save()
     messages.success(request, "Producto eliminada.")
-    return redirect("listarcategoria")
+    return redirect("listarproducto")
 
-def activarcategoria(request,id,activo):
-    producto=Producto.objects.get(idCategoria=id)
+def activarproducto(request,id,activo):
+    producto=Producto.objects.get(idProducto=id)
     if activo == 0:
         producto.activo=True
     else:
         producto.activo=False
     producto.save()
     messages.success(request, "Producto actualizada.")
-    return redirect("listarcategoria") 
+    return redirect("listarproducto") 
