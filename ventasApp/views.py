@@ -1,6 +1,6 @@
 from pydoc import describe
 from django.shortcuts import render,redirect 
-from VentasApp.models import Categoria 
+from ventasApp.models import Categoria 
 from django.db.models import Q 
 from .forms import CategoriaForm
 from django.contrib import messages

@@ -5,4 +5,14 @@ from .models import Categoria
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model=Categoria
-        fields=['descripcion','activo']
+        fields=[
+            'descripcion',
+            'activo',
+            'eliminado',
+            'usuarioRegistro',
+            'fechaRegistro',
+            ]
+        widgets = {
+        'fechaRegistro': forms.TextInput(attrs={'type': 'date'})
+
+    }

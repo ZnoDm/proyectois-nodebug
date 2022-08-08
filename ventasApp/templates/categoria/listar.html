@@ -2,13 +2,19 @@
 {% block content %}
     <div class="container">
         <div class="card card-outline card-info mt-3">
-        <div class="card-header">
-            <h1 class="card-title">LISTADO DE CATEGORIAS</h1>
-            <a href="{% url 'agregarcategoria' %}" class='btn btn-sm btn-primary btnadd'><i class='fas fa-plus'></i> NUEVO</a>
+        <div class="card-header d-flex justify-content-between">
+            <div>
+                <h1 class="card-title align-items-center">LISTADO DE CATEGORIAS</h1>
+            </div>
+            <div class="ml-auto">
+                <a href="{% url 'agregarcategoria' %}" class='btn btn-sm btn-primary'>
+                    <i class='fas fa-plus'></i> NUEVO
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6 pull-right">
+                <div class="col-12 col-md-4">
                     <form action="" method="GET">
                         <div class="input-group">
                             <input type="text" name="buscar" id="buscar" class="form-control" autofocus placeholder="Buscar" value=""><span class="input-group-btn">
@@ -17,12 +23,14 @@
                     </form>
                 </div>
             </div>
+            <br>
+
             <table id="tablasubfamilias" class="table table-striped mt4" style="width:100%">
                 <thead class="bg-info text-white">
                     <tr>
-                        <th>CODIGO</th>
+                        <th>ID</th>
                         <th>DESCRIPCION</th>
-                        <th>ESTADO</th>
+                        <th>ACTIVO</th>
                         <th><center>OPCIONES</center></th>
                     </tr>
                 </thead>
@@ -33,19 +41,29 @@
                     <td>{{ itemcategoria.descripcion }}</td>
                     <td>{{ itemcategoria.activo }}</td>
                     <td style="text-align: center;">
-                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Editar</a>
-                        <a href="#" onclick="eliminarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Eliminar</a>
+                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="#" onclick="eliminarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr style="text-align: center;">
-                    <td colspan="3">
+                    <td colspan="4">
                         <p>No hay Registros</p>
                     </td>
                 </tr>
                 {% endif %}
             </table>
+            {% comment %} <nav aria-label="pagination-django">
+                <ul class="pagination">
+                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav> {% endcomment %}
+
             <div class="pagination">
                 <span class="step-links">
                     {% if page_obj.has_previous %}

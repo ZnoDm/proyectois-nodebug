@@ -33,9 +33,9 @@ def acceder(request):
     form=AuthenticationForm()
     return render(request, "login.html", {"form": form})
 
-def bienvenido(request):
+def home(request):
     context={}
-    return render(request, "bienvenido.html",{'userLogged':request.session['user_logged']})
+    return render(request, "home.html",{'userLogged':request.session['user_logged']})
 
 def salir(request):    
     del request.session['user_logged']
