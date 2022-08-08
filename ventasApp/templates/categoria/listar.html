@@ -1,0 +1,98 @@
+{% extends "plantilla.html" %}
+{% block content %}
+    <div class="container">
+        <div class="card card-outline card-info mt-3">
+        <div class="card-header">
+            <h1 class="card-title">LISTADO DE CATEGORIAS</h1>
+            <a href="{% url 'agregarcategoria' %}" class='btn btn-sm btn-primary btnadd'><i class='fas fa-plus'></i> NUEVO</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 pull-right">
+                    <form action="" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="buscar" id="buscar" class="form-control" autofocus placeholder="Buscar" value=""><span class="input-group-btn">
+                            <button class="btn btn-primary"><i class="fa fa-search"></i></button></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="tablasubfamilias" class="table table-striped mt4" style="width:100%">
+                <thead class="bg-info text-white">
+                    <tr>
+                        <th>CODIGO</th>
+                        <th>DESCRIPCION</th>
+                        <th>ESTADO</th>
+                        <th><center>OPCIONES</center></th>
+                    </tr>
+                </thead>
+                {% if page_obj %}
+                {% for itemcategoria in page_obj %}
+                <tr>
+                    <td>{{ itemcategoria.idCategoria}}</td>
+                    <td>{{ itemcategoria.descripcion }}</td>
+                    <td>{{ itemcategoria.activo }}</td>
+                    <td style="text-align: center;">
+                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i> Editar</a>
+                        <a href="#" onclick="eliminarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr style="text-align: center;">
+                    <td colspan="3">
+                        <p>No hay Registros</p>
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+            
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% if messages %}
+    {% for m in messages %}
+        <script>
+            Swal.fire({
+            "title": "Eliminado",
+            "text":"{{m}}",
+            "icon":"success"
+            })
+        </script>
+    {% endfor %}
+    {% endif %}
+    <script>
+        function eliminarCategoria(id,descripcion){
+            Swal.fire({ "title":"¿Realmente desea eliminar Registro?",
+            "text":"Codigo :"+ id + " Descripción :" + descripcion,
+            "icon":"question",
+            "showCancelButton":true,
+            "cancelButtonText":"No",
+            "confirmButtonText":"Si",
+            "reverseButton":true,
+            "confirmButtonColor":"#dc3545"
+            }).then(function(result){ if(result.isConfirmed){
+                window.location.href="/eliminarcategoria/"+id+"/" }
+        })
+    }
+</script>
+{% endblock %} 
