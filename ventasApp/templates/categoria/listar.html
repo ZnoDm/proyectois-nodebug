@@ -1,8 +1,8 @@
 {% extends "plantilla.html" %}
 {% block content %}
     <div class="container">
-        <div class="card card-outline card-info mt-3">
-        <div class="card-header d-flex justify-content-between">
+        <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between p-3">
             <div>
                 <h1 class="card-title align-items-center">LISTADO DE CATEGORIAS</h1>
             </div>
@@ -25,13 +25,13 @@
             </div>
             <br>
 
-            <table id="tablasubfamilias" class="table table-striped mt4" style="width:100%">
-                <thead class="bg-info text-white">
+            <table class="table" style="width:100%">
+                <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>DESCRIPCION</th>
-                        <th>ACTIVO</th>
-                        <th><center>OPCIONES</center></th>
+                        <th>Id</th>
+                        <th>Descripción</th>
+                        <th>Activo</th>
+                        <th><center>Opciones</center></th>
                     </tr>
                 </thead>
                 {% if page_obj %}
@@ -39,9 +39,14 @@
                 <tr>
                     <td>{{ itemcategoria.idCategoria}}</td>
                     <td>{{ itemcategoria.descripcion }}</td>
-                    <td>{{ itemcategoria.activo }}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" onclick="activarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.activo}}')" {% if itemcategoria.activo %} checked {% endif %} >
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
                     <td style="text-align: center;">
-                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                         <a href="#" onclick="eliminarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
@@ -64,26 +69,28 @@
                 </ul>
             </nav> {% endcomment %}
 
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-            
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            <div class="d-flex justify-content-end">
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                
+                        <span class="current">
+                            Página {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
                     </span>
-            
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
+                </div>
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock content %}
 
 {% block js %}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -91,17 +98,18 @@
     {% for m in messages %}
         <script>
             Swal.fire({
-            "title": "Eliminado",
+            "title": "Éxito",
             "text":"{{m}}",
             "icon":"success"
             })
+            console.log("{{m}}")
         </script>
     {% endfor %}
     {% endif %}
     <script>
         function eliminarCategoria(id,descripcion){
             Swal.fire({ "title":"¿Realmente desea eliminar Registro?",
-            "text":"Codigo :"+ id + " Descripción :" + descripcion,
+            "text":"Código :"+ id + " - Descripción :" + descripcion,
             "icon":"question",
             "showCancelButton":true,
             "cancelButtonText":"No",
@@ -110,7 +118,80 @@
             "confirmButtonColor":"#dc3545"
             }).then(function(result){ if(result.isConfirmed){
                 window.location.href="/eliminarcategoria/"+id+"/" }
-        })
-    }
+        });
+        }
+
+        function activarCategoria(id,activo){
+            let estado;
+            if(activo=='False')
+                estado=0
+            else
+                estado=1
+            window.location.href="/activarcategoria/"+id+"/"+ estado +"/" 
+        };
 </script>
-{% endblock %} 
+{% endblock js %} 
+
+{% block css %}
+    <style>
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+    
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+    
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+    
+    .slider.round:before {
+      border-radius: 50%;
+    }
+    </style>
+{% endblock css %}

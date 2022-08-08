@@ -145,7 +145,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 MESSAGE_TAGS = {
     message_constants.DEBUG:'debug',
     message_constants.INFO:'info',
-    message_constants.SUCCESS:'succes',
+    message_constants.SUCCESS:'success',
     message_constants.WARNING:'warning',
     message_constants.ERROR:'danger',
 }

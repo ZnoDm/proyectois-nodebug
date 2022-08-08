@@ -5,7 +5,6 @@ from django.db.models import Q
 from .forms import CategoriaForm
 from django.contrib import messages
 from django.core.paginator import Paginator
-
 # Create your views here.
 def agregarcategoria(request):
     if request.method=="POST":
@@ -54,5 +53,17 @@ def editarcategoria(request,id):
 def eliminarcategoria(request,id):
     categoria=Categoria.objects.get(idCategoria=id) 
     categoria.activo=False
+    categoria.eliminado=True
     categoria.save()
+    messages.success(request, "Categoria eliminada.")
+    return redirect("listarcategoria")
+
+def activarcategoria(request,id,activo):
+    categoria=Categoria.objects.get(idCategoria=id)
+    if activo == 0:
+        categoria.activo=True
+    else:
+        categoria.activo=False
+    categoria.save()
+    messages.success(request, "Categoria actualizada.")
     return redirect("listarcategoria") 

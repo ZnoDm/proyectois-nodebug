@@ -8,7 +8,6 @@ class CategoriaForm(forms.ModelForm):
         fields=[
             'descripcion',
             'activo',
-            'eliminado',
             'usuarioRegistro',
             'fechaRegistro',
             ]
