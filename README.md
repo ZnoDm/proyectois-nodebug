@@ -1,24 +1,28 @@
 # BoutiqueMegaCentro
 IS I
-Cambir el nombre del proyecto descargado a:
+
+PRIMER PASO: 
+Cambiar el nombre del proyecto descargado a:
 	
 	proyectois
 
-PRIMER PASO: 
+SEGUNDO PASO: 
 ===============          CRISPY-FORMS          ===============
+
+En la terminal:
 
 	pip install django-crispy-forms
 
-SEGUNDO PASO:
+TERCER PASO:
 ===============         BASE DE DATOS          ==================
 
-Base de Datos en TERMINAL:
+En la terminal:
 
 	pip3 list
 	pip3 install PyMySQL
 	
 
-__init__.py:
+En el archivo proyectois/__init__.py:
 
 	import pymysql
 	pymysql.install_as_MySQLdb()
@@ -28,7 +32,7 @@ settings configuramos la conexión con MYSQL:
 	DATABASES = {
 	    'default': {
 		'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'examen2',
+		'NAME': 'test01',
 		'USER': 'root',
 		'PASSWORD': '',
 		'HOST': 'localhost',
@@ -41,7 +45,7 @@ Ejecutamos los commandos para que aparezcan las tablas.
 	python manage.py makemigrations
 	python manage.py migrate
   
-TERCER PASO:
+
 ===============        Ejecutando proyecto        ==================
 
 	python manage.py runserver
