@@ -37,4 +37,5 @@ urlpatterns = [
     path('proveedor/', include('ventasApp.routes.proveedor'),name="proveedor"),
     path('tipoCliente/', include('ventasApp.routes.tipoCliente'),name="tipoCliente"),
     path('trabajador/', include('ventasApp.routes.trabajador'),name="trabajador"),
+    path('pedidoVenta/', include('ventasApp.routes.pedidoVenta'),name="pedidoVenta"),
 ]

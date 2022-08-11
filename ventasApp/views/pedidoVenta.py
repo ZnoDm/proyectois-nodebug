@@ -1,71 +1,71 @@
 from pydoc import describe
 from django.shortcuts import render,redirect 
-from ventasApp.models import FormaPago 
+from ventasApp.models import PedidoVenta 
 from django.db.models import Q 
-from ventasApp.forms import FormaPagoForm
+from ventasApp.forms import PedidoVentaForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 # Create your views here.
-def agregarcategoria(request):
+def agregarpedidoVenta(request):
     if request.method=="POST":
-        form=FormaPagoForm(request.POST)
+        form=PedidoVentaForm(request.POST)
         if form.is_valid():
-            descripcion_categoria = form.cleaned_data.get("descripcion")
-            categoria_exits = (FormaPago.objects.filter(descripcion=descripcion_categoria).count()>0)
-            if categoria_exits:
-                messages.info(request, "FormaPago ya existe.")
-                form=FormaPagoForm()
+            codigo_pedidoVenta = form.cleaned_data.get("codigo")
+            pedidoVenta_exits = (PedidoVenta.objects.filter(codigo=codigo_pedidoVenta).count()>0)
+            if pedidoVenta_exits:
+                messages.info(request, "Pedido de venta ya existente.")
+                form=PedidoVentaForm()
                 context={'form':form}
-                return render(request,"formaPago/agregar.html",context) 
+                return render(request,"pedidoVenta/agregar.html",context) 
             else:
-                messages.success(request, "FormaPago registrada.")
+                messages.success(request, "Pedido de venta registrado.")
                 form.save() 
-                return redirect("listarcategoria") 
-
+                return redirect("listarpedidoVenta") 
+    
     else:
-        form=FormaPagoForm()
+        form=PedidoVentaForm()
         context={'form':form} 
-        return render(request,"formaPago/agregar.html",context) 
+        return render(request,"pedidoVenta/agregar.html",context) 
 
-def listarcategoria(request):
+def listarpedidoVenta(request):
     
     queryset = request.GET.get("buscar")
-    formaPago = FormaPago.objects.all().filter(eliminado=False).order_by('-idFormaPago').values()
+    pedidoVenta = PedidoVenta.objects.all().filter(eliminado=False).order_by('-idPedidoVenta').values()
     if queryset:
-        formaPago=FormaPago.objects.filter(Q(descripcion__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idFormaPago').values() 
-    paginator = Paginator(formaPago, 3)
+        pedidoVenta=PedidoVenta.objects.filter(Q(codigo__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idPedidoVenta').values() 
+    paginator = Paginator(pedidoVenta, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context={'formaPago':formaPago}
-    return render(request,"formaPago/listar.html",{'page_obj': page_obj})
+    context={'pedidoVenta':pedidoVenta}
+    return render(request,"pedidoVenta/listar.html",{'page_obj': page_obj})
 
-def editarcategoria(request,id):
-    formaPago=FormaPago.objects.get(idFormaPago=id)
+def editarpedidoVenta(request,id):
+    pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=id)
     if request.method=="POST":
-        form=FormaPagoForm(request.POST,instance=formaPago)
+        form=PedidoVentaForm(request.POST,instance=pedidoVenta)
         if form.is_valid():
-            messages.success(request, "Cliente actualizado.")
+            messages.success(request, "Pedido actualizado.")
             form.save() 
-            return redirect("listarcategoria") 
+            return redirect("listarpedidoVenta") 
     else:
-        form=FormaPagoForm(instance=formaPago)
+        form=PedidoVentaForm(instance=pedidoVenta)
         context={"form":form} 
-        return render(request,"formaPago/edit.html",context)
+        return render(request,"pedidoVenta/edit.html",context)
 
-def eliminarcategoria(request,id):
-    formaPago=FormaPago.objects.get(idFormaPago=id) 
-    formaPago.activo=False
-    formaPago.eliminado=True
-    formaPago.save()
-    messages.success(request, "FormaPago eliminada.")
-    return redirect("listarcategoria")
+def eliminarpedidoVenta(request,id):
+    pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=id) 
+    pedidoVenta.activo=False
+    pedidoVenta.eliminado=True
+    pedidoVenta.save()
+    messages.success(request, "Pedido de venta eliminado.")
+    return redirect("listarpedidoVenta")
 
-def activarcategoria(request,id,activo):
-    formaPago=FormaPago.objects.get(idFormaPago=id)
+def activarpedidoVenta(request,id,activo):
+    pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=id)
     if activo == 0:
-        formaPago.activo=True
+        pedidoVenta.activo=True
     else:
-        formaPago.activo=False
-    formaPago.save()
-    messages.success(request, "FormaPago actualizada.")
-    return redirect("listarcategoria") 
+        pedidoVenta.activo=False
+    pedidoVenta.save()
+    messages.success(request, "Pedido de venta actualizado.")
+    return redirect("listarpedidoVenta") 

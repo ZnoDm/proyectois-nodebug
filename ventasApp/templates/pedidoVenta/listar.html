@@ -1,15 +1,15 @@
 {% extends "plantilla.html" %}
-{% block title %} Boutique | Categoria {% endblock title %}
+{% block title %} Boutique | Pedido de Venta {% endblock title %}
 
 {% block content %}
     <div class="container">
         <div class="card mt-3">
         <div class="card-header d-flex justify-content-between p-3">
             <div>
-                <h1 class="card-title align-items-center">LISTADO DE CATEGORIAS</h1>
+                <h1 class="card-title align-items-center">LISTADO DE PEDIDOS DE VENTA</h1>
             </div>
             <div class="ml-auto">
-                <a href="{% url 'agregarcategoria' %}" class='btn btn-sm btn-primary'>
+                <a href="{% url 'agregarpedidoVenta' %}" class='btn btn-sm btn-primary'>
                     <i class='fas fa-plus'></i> NUEVO
                 </a>
             </div>
@@ -31,31 +31,40 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Id</th>
-                        <th>Descripción</th>
-                        <th>Activo</th>
+                        <th>Código</th>
+                        <th>Fecha Emisión</th>
+                        <th>Fecha Entrega</th>
+                        <th>Moneda</th>
+                        <th>Tasa de Cambio</th>
+                        <th>Subtotal</th>
+                        <th>IGV</th>
+                        <th>Descuento</th>
+                        <th>Total</th>
                         <th><center>Opciones</center></th>
                     </tr>
                 </thead>
                 {% if page_obj %}
-                {% for itemcategoria in page_obj %}
+                {% for itempedidoventa in page_obj %}
                 <tr>
-                    <td>{{ itemcategoria.idCategoria}}</td>
-                    <td>{{ itemcategoria.descripcion }}</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" onclick="activarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.activo}}')" {% if itemcategoria.activo %} checked {% endif %} >
-                            <span class="slider round"></span>
-                        </label>
-                    </td>
+                    <td>{{ itempedidoventa.idPedidoVenta}}</td>
+                    <td>{{ itempedidoventa.codigo }}</td>
+                    <td>{{ itempedidoventa.fechaEmision }}</td>
+                    <td>{{ itempedidoventa.fechaEntrega }}</td>
+                    <td>{{ itempedidoventa.tipoMoneda }}</td>
+                    <td>{{ itempedidoventa.tasaCambio }}</td>
+                    <td>{{ itempedidoventa.subtotal }}</td>
+                    <td>{{ itempedidoventa.tasaIgv }}</td>
+                    <td>{{ itempedidoventa.descuento }}</td>
+                    <td>{{ itempedidoventa.total }}</td>
                     <td style="text-align: center;">
-                        <a href="{% url 'editarcategoria' itemcategoria.idCategoria %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href="#" onclick="eliminarCategoria('{{itemcategoria.idCategoria}}','{{itemcategoria.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        <a href="{% url 'editarpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="#" onclick="eliminarpedidoVenta('{{itempedidoventa.idPedidoVenta}}','{{itempedidoventa.codigo}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr style="text-align: center;">
-                    <td colspan="4">
+                    <td colspan="12">
                         <p>No hay Registros</p>
                     </td>
                 </tr>

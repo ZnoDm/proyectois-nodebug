@@ -124,6 +124,10 @@ class PedidoVentaForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
+            'fechaModificacion': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEliminacion': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
         }
 class OrdenCompraForm(forms.ModelForm):
     class Meta:

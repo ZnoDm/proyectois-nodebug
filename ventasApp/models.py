@@ -37,7 +37,7 @@ class Trabajador(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.nombres
 
 # Create your views here.
 class TipoCliente(models.Model):
@@ -97,7 +97,7 @@ class Cliente(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.nombres
 
 #========= VISTA FRECUENCIA =========
 BIMENSUAL = 'BIMENSUAL'
@@ -128,7 +128,7 @@ class FormaPago(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.descripcion
 
 class Categoria(models.Model):
     idCategoria=models.AutoField(primary_key=True)
@@ -200,7 +200,9 @@ ESTADO  = (
 
 class PedidoVenta(models.Model):
     idPedidoVenta = models.AutoField(primary_key=True)
-    trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
+
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    trabajador = models.OneToOneField(Trabajador, on_delete = models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE)
     formaPago = models.ForeignKey(FormaPago, on_delete = models.CASCADE)
     codigo = models.CharField(max_length=10)

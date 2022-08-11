@@ -39,17 +39,17 @@
                 {% if page_obj %}
                 {% for itemformaPago in page_obj %}
                 <tr>
-                    <td>{{ itemformaPago.idformaPago}}</td>
+                    <td>{{ itemformaPago.idFormaPago}}</td>
                     <td>{{ itemformaPago.descripcion }}</td>
                     <td>
                         <label class="switch">
-                            <input type="checkbox" onclick="activarformaPago('{{itemformaPago.idformaPago}}','{{itemformaPago.activo}}')" {% if itemformaPago.activo %} checked {% endif %} >
+                            <input type="checkbox" onclick="activarformaPago('{{itemformaPago.idFormaPago}}','{{itemformaPago.activo}}')" {% if itemformaPago.activo %} checked {% endif %} >
                             <span class="slider round"></span>
                         </label>
                     </td>
                     <td style="text-align: center;">
-                        <a href="{% url 'editarformaPago' itemformaPago.idformaPago %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href="#" onclick="eliminarformaPago('{{itemformaPago.idformaPago}}','{{itemformaPago.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        <a href="{% url 'editarformaPago' itemformaPago.idFormaPago %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="#" onclick="eliminarformaPago('{{itemformaPago.idFormaPago}}','{{itemformaPago.descripcion}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 {% endfor %}

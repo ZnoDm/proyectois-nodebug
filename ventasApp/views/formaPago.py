@@ -10,7 +10,17 @@ def agregarformaPago(request):
     if request.method=="POST":
         form=FormaPagoForm(request.POST)
         if form.is_valid():
-            return redirect("listarformaPago") 
+            descripcion_formaPago = form.cleaned_data.get("descripcion")
+            formaPago_exits = (FormaPago.objects.filter(descripcion=descripcion_formaPago).count()>0)
+            if formaPago_exits:
+                messages.info(request, "Forma de pago ya existente.")
+                form=FormaPagoForm()
+                context={'form':form}
+                return render(request,"formaPago/agregar.html",context) 
+            else:
+                messages.success(request, "Forma de pago registrada.")
+                form.save() 
+                return redirect("listarformaPago") 
 
     else:
         form=FormaPagoForm()

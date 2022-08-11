@@ -7,5 +7,5 @@ urlpatterns = [
     path('create/',pedidoVenta.agregarpedidoVenta ,name="agregarpedidoVenta"),
     path('edit/<int:id>/',pedidoVenta.editarpedidoVenta ,name="editarpedidoVenta"),
     path('delete/<int:id>/',pedidoVenta.eliminarpedidoVenta,name="eliminarpedidoVenta"), 
-    path('active/<int:id>/<int:activo>/',pedidoVenta.activarpedidoVenta,name="activarpedidoVenta"), 
+    path('active/<int:id>/<int:activo>/',pedidoVenta.activarpedidoVenta,name="activarpedidoVenta"),
 ]
