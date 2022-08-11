@@ -1,5 +1,8 @@
 # BoutiqueMegaCentro
 IS I
+Cambir el nombre del proyecto descargado a:
+	
+	proyectois
 
 PRIMER PASO: 
 ===============          CRISPY-FORMS          ===============
