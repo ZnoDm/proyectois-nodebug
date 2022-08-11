@@ -1,10 +1,11 @@
 from pydoc import describe
 from django.shortcuts import render,redirect 
-from ventasApp.models import Cliente 
+from ventasApp.models import Cliente, TipoCliente 
 from django.db.models import Q 
 from ventasApp.forms import ClienteForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 # Create your views here.
 def agregarcliente(request):
     if request.method=="POST":
@@ -33,10 +34,15 @@ def listarcliente(request):
     cliente = Cliente.objects.all().filter(eliminado=False).order_by('-idCliente').values()
     if queryset:
         cliente=Cliente.objects.filter(Q(documentoIdentidad__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idCliente').values() 
-    paginator = Paginator(cliente, 3)
+    list_cliente = []
+    for c in cliente:
+        tipo_cliente=TipoCliente.objects.get(idTipoCliente=c['idCliente'])
+        list_cliente.append({
+            'idCliente': c['idCliente'], 'tipoCliente': tipo_cliente, 'nombres': c['nombres'], 'apellidos': c['apellidos'], 'direccion': c['direccion'], 'email': c['email'], 'telefono': c['telefono'], 'tipoDocumentoIdentidad': c['tipoDocumentoIdentidad'], 'documentoIdentidad': c['documentoIdentidad'], 'activo': c['activo'], 'eliminado': c['eliminado'], 'usuarioRegistro': c['usuarioRegistro'], 'fechaRegistro': c['fechaRegistro'], 'usuarioModificacion': c['usuarioModificacion'], 'fechaModificacion': c['fechaModificacion'], 'usuarioEliminacion': c['usuarioEliminacion'], 'fechaEliminacion': c['fechaEliminacion']
+        })
+    paginator = Paginator(list_cliente, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context={'cliente':cliente}
     return render(request,"cliente/listar.html",{'page_obj': page_obj})
 
 def editarcliente(request,id):

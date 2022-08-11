@@ -65,7 +65,8 @@ RUC = 'RUC'
 PASAPORTE = 'PASAPORTE'
 OTRO = 'OTRO'
 TIPODOCUMENTOIDENTIDAD  = (
-        (DNI, 'Documento de Identidad'),
+        (DNI, 'Documento de Identidad'),        
+        (RUC, 'Documento Nacional de Identidad'),
         (RUC, 'Registro Único de Contribuyentes'),
         (PASAPORTE, 'Pasaporte'),
         (OTRO, 'Otro'),
@@ -143,7 +144,7 @@ class Categoria(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.descripcion
 
 class Producto(models.Model):
     idProducto = models.AutoField(primary_key=True)

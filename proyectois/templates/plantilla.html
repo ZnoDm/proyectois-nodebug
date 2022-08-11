@@ -4,21 +4,44 @@
     {% load static %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{% static 'login/images/icons8-shop-16.png'%}"/>
+
     <title> {% block title %} {% endblock %}</title>
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;900&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{% static '/adminlte/plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static '/adminlte/dist/css/adminlte.min.css' %}">
-   
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {% comment %} <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> {% endcomment %}
     {% block css %} {% endblock %}
     <style>
+      :root {
+        --font-size: 1;
+      }
+      body{
+        font-family: 'Poppins', sans-serif;
+        font-size: calc(var(--font-size) * 0.9em)
+      }
       .sidebar-dark-primary{
+        background: url("{% static 'adminlte/dist/img/bg-01.jpg' %}") no-repeat center center fixed;
+	      background-size: cover;
+      }
+      .nav-link,.nav-header{
+        color: #000!important;
+      }
+      .brand-text{
+        color: #0D1C31!important;
+        font-weight: bold!important;
+        font-family: 'Poppins', sans-serif;
+
+      }
+      {% comment %} .sidebar-dark-primary{
         background: #0D1C31 !important;
         color:#fff;
-      }
+      } {% endcomment %}
     </style>
    </head>
    
@@ -57,7 +80,7 @@
             Perfil
           </a>
           <a href="#" class="dropdown-item">
-            Configuracion
+            Configuración
           </a>
           
           <div class="dropdown-divider"></div>
@@ -77,150 +100,159 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{% url 'home' %}" class="brand-link d-block text-center w-100 pl-2 pr-3 pt-3" style="text-decoration: none;">
-      <div class="d-flex justify-content-center text-center">
-        <img src="{% static '/adminlte/dist/img/Luxurious-Logo-Design-Idea.jpg' %}" alt="AdminLTE Logo" class="img-fluid" style="height:75px;">
-      </div>
+    <a href="{% url 'home' %}" class="brand-link" style="text-decoration: none;">
+        <img src="{% static 'login/images/icons8-shop-16.png'%}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="height:75px;">
+      <span class="brand-text font-weight-light">MegaCentro</span>
     </a>
     <!-- Sidebar Menu -->
-    <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>
-              Dashboard
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="../../index.html" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Dashboard v1</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-header">ACCESOS</li>
-        
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Usuarios
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Roles
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Permisos
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'listartrabajador' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Trabajadores
-            </p>
-          </a>
-        </li>
-        <hr class="my-3 text-white"></hr>
-        <li class="nav-header">REGISTROS</li>
-        <li class="nav-item">
-          <a href="{% url 'listarcategoria' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Categorias
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'listarcliente' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Clientes
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'listarformaPago' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Formas de Pago
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'listarproducto' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Productos
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'listarproveedor' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Proveedores
-            </p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'listartipoCliente' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Tipo Cliente
-            </p>
-          </a>
-        </li>
-        
-        <li class="nav-header">PROCESOS</li>
-        
-        
-        <li class="nav-item">
-          <a href="{% url 'listarcategoria' %}" class="nav-link">
-            <i class="nav-icon fas fa-box-open"></i>
-            <p>
-              Pedido Venta
-            </p>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item menu-is-opening menu-open">
+            <a href="#" class="nav-link ">
+              <p>
+                Accesos
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'listarusuario' %}" class="nav-link">                  
+                  <i class="nav-icon fas fa-solid fa-user"></i>
+                  <p>
+                    Usuarios
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarrole' %}" class="nav-link">
+                  <i class="nav-icon fa-solid fa-people-line"></i>
+                  <p>
+                    Roles
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarpermiso' %}" class="nav-link">
+                  <i class="nav-icon fa fa-solid fa-user-gear"></i>
+                  <p>
+                    Permisos
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item menu-is-opening menu-open">
+            <a href="#" class="nav-link">              
+              <p>
+                Registros
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">              
+              <li class="nav-item">
+                <a href="{% url 'listartrabajador' %}" class="nav-link">
+                  <i class="nav-icon fa-solid fa-person"></i>
+                  <p>
+                    Trabajadores
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarcategoria' %}" class="nav-link">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>
+                    Categorias
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarcliente' %}" class="nav-link">
+                  <i class="nav-icon fas fa-truck-loading"></i>
+                  <p>
+                    Clientes
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarformaPago' %}" class="nav-link">
+                  <i class="nav-icon far fa-credit-card"></i>
+                  <p>
+                    Formas de Pago
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarproducto' %}" class="nav-link">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>
+                    Productos
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listarproveedor' %}" class="nav-link">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>
+                    Proveedores
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'listartipoCliente' %}" class="nav-link">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>
+                    Tipo Cliente
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <p>
+                Procesos
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'listarcategoria' %}" class="nav-link">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>
+                    Pedido Venta
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          
+          
+        </ul>
+      </nav>
+    </div>
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    {% comment %} <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1>{% block titleContent %} {% endblock %}</h1>
           </div>
-          {% comment %} <div class="col-sm-6">
+          <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
 
               <li class="breadcrumb-item active">Blank Page</li>
             </ol>
-          </div> {% endcomment %}
+          </div>
         </div>
       </div><!-- /.container-fluid -->
-    </section>
+    </section> {% endcomment %}
 
     <!-- Main content -->
     <section class="content">

@@ -22,7 +22,12 @@ urlpatterns = [
     path('', acceder, name='login'),
     path('home/', home, name='home'),
     path('logout/',salir,name="logout"), 
+
+    path('usuario/',include('seguridadApp.routes.usuario'),name="usuario"), 
+    path('permiso/',include('seguridadApp.routes.permiso'),name="permiso"), 
+    path('role/',include('seguridadApp.routes.role'),name="role"), 
     
+
     path('admin/', admin.site.urls),
 
     path('categoria/', include('ventasApp.routes.categoria'),name="categoria"),

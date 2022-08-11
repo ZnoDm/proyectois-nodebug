@@ -1,7 +1,7 @@
 from django import forms 
 from django.forms import fields 
 from .models import *
-
+from django.contrib.auth.models import User
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -63,16 +63,7 @@ class ProductoForm(forms.ModelForm):
             'modelo',
             'stock',
             'precioUnitario',
-            'urlImagen',
-            'nombreImagen',
-            'fechaCargaImagen',
-            'activo',
-            'usuarioRegistro',
-            'fechaRegistro',
             ]
-        widgets = {
-            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
-        }
 
 
 class ProveedorForm(forms.ModelForm):
@@ -126,4 +117,20 @@ class TipoClienteForm(forms.ModelForm):
         widgets = {
             'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
         }
+
+class PedidoVentaForm(forms.ModelForm):
+    class Meta:
+        model=PedidoVenta
+        fields = '__all__'
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+class OrdenCompraForm(forms.ModelForm):
+    class Meta:
+        model = OrdenCompra
+        fields = '__all__'
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+        }
+        
 
