@@ -3,30 +3,30 @@ IS I
 
 PRIMER PASO: 
 ===============          CRISPY-FORMS          ===============
-pip install django-crispy-forms
+	pip install django-crispy-forms
 
 SEGUNDO PASO:
 ===============         BASE DE DATOS          ==================
 
 Base de Datos en TERMINAL: 
-				pip3 list
-				pip3 install PyMySQL
+	 pip3 list
+	pip3 install PyMySQL
 
 __init__.py: 
-				import pymysql
-				pymysql.install_as_MySQLdb()
+	import pymysql
+	pymysql.install_as_MySQLdb()
 
 settings configuramos la conexión con MYSQL:
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'examen2',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
+	DATABASES = {
+	    'default': {
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'examen2',
+		'USER': 'root',
+		'PASSWORD': '',
+		'HOST': 'localhost',
+		'PORT': '3306',
+		}
 	}
-}
 
 Ejecutamos los commandos para que aparezcan las tablas. 
 
@@ -35,4 +35,4 @@ Ejecutamos los commandos para que aparezcan las tablas.
   
 TERCER PASO:
 ===============        Ejecutando proyecto        ==================
-python manage.py runserver
+	python manage.py runserver
