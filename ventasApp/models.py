@@ -201,8 +201,7 @@ ESTADO  = (
 class PedidoVenta(models.Model):
     idPedidoVenta = models.AutoField(primary_key=True)
 
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
-    trabajador = models.OneToOneField(Trabajador, on_delete = models.CASCADE)
+    trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE)
     formaPago = models.ForeignKey(FormaPago, on_delete = models.CASCADE)
     codigo = models.CharField(max_length=10)
@@ -231,7 +230,7 @@ class PedidoVenta(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.codigo
 
 
 
@@ -278,7 +277,7 @@ class Proveedor(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.nombreComercial
 
 
 class OrdenCompra(models.Model):
@@ -313,7 +312,7 @@ class OrdenCompra(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.codigo
 
 class DetalleOrdenCompra(models.Model):
     idDetalleOrdenCompra = models.AutoField(primary_key=True)
@@ -349,8 +348,8 @@ TIPOOPERACION  = (
 class NotaAlmacen(models.Model):
     idNotaAlmacen = models.AutoField(primary_key=True)    
     trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
-    pedidoVenta_id = models.IntegerField()
-    ordenCompra_id = models.IntegerField()
+    pedidoVenta = models.ForeignKey(PedidoVenta, on_delete = models.CASCADE)
+    ordenCompra = models.ForeignKey(OrdenCompra, on_delete = models.CASCADE)
     codigo = models.CharField(max_length=10)
 
     fechaEmision = models.DateField()

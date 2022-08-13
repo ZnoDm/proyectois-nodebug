@@ -27,7 +27,6 @@ urlpatterns = [
     path('permiso/',include('seguridadApp.routes.permiso'),name="permiso"), 
     path('role/',include('seguridadApp.routes.role'),name="role"), 
     
-
     path('admin/', admin.site.urls),
 
     path('categoria/', include('ventasApp.routes.categoria'),name="categoria"),
@@ -38,4 +37,6 @@ urlpatterns = [
     path('tipoCliente/', include('ventasApp.routes.tipoCliente'),name="tipoCliente"),
     path('trabajador/', include('ventasApp.routes.trabajador'),name="trabajador"),
     path('pedidoVenta/', include('ventasApp.routes.pedidoVenta'),name="pedidoVenta"),
+    path('ordenCompra/', include('ventasApp.routes.ordenCompra'),name="ordenCompra"),
+    path('notaAlmacen/', include('ventasApp.routes.notaAlmacen'),name="notaAlmacen"),
 ]

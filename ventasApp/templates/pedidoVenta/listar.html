@@ -119,9 +119,9 @@
     {% endfor %}
     {% endif %}
     <script>
-        function eliminarCategoria(id,descripcion){
+        function eliminarpedidoVenta(id,codigo){
             Swal.fire({ "title":"¿Realmente desea eliminar Registro?",
-            "text":"Código :"+ id + " - Descripción :" + descripcion,
+            "text":"ID:"+ id + " - Código :" + codigo,
             "icon":"question",
             "showCancelButton":true,
             "cancelButtonText":"No",
@@ -129,17 +129,17 @@
             "reverseButton":true,
             "confirmButtonColor":"#dc3545"
             }).then(function(result){ if(result.isConfirmed){
-                window.location.replace(window.location.origin+"/categoria/delete/"+id+"/") }
+                window.location.replace(window.location.origin+"/pedidoVenta/delete/"+id+"/") }
         });
         }
 
-        function activarCategoria(id,activo){
+        function activarpedidoVenta(id,activo){
             let estado;
             if(activo=='False')
                 estado=0
             else
                 estado=1
-                window.location.replace(window.location.origin+"/categoria/active/"+id+"/"+ estado +"/")
+                window.location.replace(window.location.origin+"/pedidoVenta/active/"+id+"/"+ estado +"/")
         };
 </script>
 {% endblock js %} 

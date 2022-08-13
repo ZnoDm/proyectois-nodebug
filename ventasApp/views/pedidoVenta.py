@@ -18,7 +18,7 @@ def agregarpedidoVenta(request):
                 context={'form':form}
                 return render(request,"pedidoVenta/agregar.html",context) 
             else:
-                messages.success(request, "Pedido de venta registrado.")
+                messages.success(request, "Pedido de Venta registrado.")
                 form.save() 
                 return redirect("listarpedidoVenta") 
     
@@ -28,7 +28,6 @@ def agregarpedidoVenta(request):
         return render(request,"pedidoVenta/agregar.html",context) 
 
 def listarpedidoVenta(request):
-    
     queryset = request.GET.get("buscar")
     pedidoVenta = PedidoVenta.objects.all().filter(eliminado=False).order_by('-idPedidoVenta').values()
     if queryset:

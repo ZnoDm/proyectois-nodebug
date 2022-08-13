@@ -120,7 +120,7 @@ class TipoClienteForm(forms.ModelForm):
 
 class PedidoVentaForm(forms.ModelForm):
     class Meta:
-        model=PedidoVenta
+        model = PedidoVenta
         fields = '__all__'
         widgets = {
             'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
@@ -129,12 +129,29 @@ class PedidoVentaForm(forms.ModelForm):
             'fechaEliminacion': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
         }
+
+
 class OrdenCompraForm(forms.ModelForm):
     class Meta:
         model = OrdenCompra
         fields = '__all__'
         widgets = {
             'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
+            'fechaModificacion': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEliminacion': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
         }
         
-
+        
+class NotaAlmacenForm(forms.ModelForm):
+    class Meta:
+        model = NotaAlmacen
+        fields = '__all__'
+        widgets = {
+            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
+            'fechaModificacion': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEliminacion': forms.TextInput(attrs={'type': 'date'}),
+            'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
+        }
