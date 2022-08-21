@@ -76,11 +76,8 @@
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
+          <a href="{% url 'perfil' %}" class="dropdown-item">
             Perfil
-          </a>
-          <a href="#" class="dropdown-item">
-            Configuración
           </a>
           
           <div class="dropdown-divider"></div>
@@ -116,6 +113,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'perfil' %}" class="nav-link">                  
+                  <i class="nav-icon fas fa-address-card"></i>
+                  <p>
+                    Datos Personales
+                  </p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="{% url 'listarusuario' %}" class="nav-link">                  
                   <i class="nav-icon fas fa-solid fa-user"></i>
@@ -209,7 +214,7 @@
             </ul>
           </li>
           
-          <li class="nav-item">
+          <li class="nav-item menu-is-opening menu-open">
             <a href="#" class="nav-link">
               <p>
                 Procesos
@@ -306,11 +311,13 @@
   <!-- AdminLTE for demo purposes -->
   <script src="{% static '/adminlte/dist/js/demo.js' %}"></script>
   <script>
-    {% if userLogged %}    
-        localStorage.setItem('token', "{{userLogged}}");
+    {% if userNameLogged %}    
+        localStorage.setItem('userNameLogged', "{{userNameLogged}}");
     {% endif %}
-
-    let user_name = localStorage.getItem('token');
+    {% if userLogged %}    
+        localStorage.setItem('userLogged', "{{userLogged}}");
+    {% endif %}
+    let user_name = localStorage.getItem('userNameLogged');
     document.getElementById('UserLogged-info').innerHTML = user_name;
     console.log(user_name)
 </script>

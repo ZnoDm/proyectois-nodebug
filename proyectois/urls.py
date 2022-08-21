@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-from seguridadApp.views import acceder,home,salir
+from seguridadApp.views.views import acceder,home,salir,perfil
 
 urlpatterns = [
     path('', acceder, name='login'),
     path('home/', home, name='home'),
     path('logout/',salir,name="logout"), 
 
+    path('perfil/',perfil,name="perfil"),
     path('usuario/',include('seguridadApp.routes.usuario'),name="usuario"), 
     path('permiso/',include('seguridadApp.routes.permiso'),name="permiso"), 
     path('role/',include('seguridadApp.routes.role'),name="role"), 

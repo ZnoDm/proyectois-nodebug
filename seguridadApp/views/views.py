@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User,Permission,Group
 from django.core.paginator import Paginator
 from django.db.models import Q 
+from ventasApp.forms import PerfilForm
 # Create your views here.
 def acceder(request):
     if request.method=="POST":
@@ -18,7 +19,8 @@ def acceder(request):
             usuario=authenticate(username=nombre_usuario, password=password)
             if usuario is not None:
                 login(request, usuario)              
-                request.session['user_logged'] = usuario.first_name + ' '+ usuario.last_name
+                request.session['userName_logged'] = usuario.first_name + ' '+ usuario.last_name
+                request.session['user_logged'] = usuario.username
                 return redirect("home")
             else:
                 messages.error(request, "Datos incorrecto.")
@@ -34,40 +36,36 @@ def acceder(request):
     return render(request, "login.html", {"form": form})
 
 def home(request):
-    return render(request, "home.html",{'userLogged':request.session['user_logged']})
+    return render(request, "home.html",{'userNameLogged':request.session['userName_logged'],'userLogged':request.session['user_logged']})
 
 def salir(request):    
     del request.session['user_logged']
+    del request.session['userName_logged']
     logout(request)
     messages.info(request,"Saliste exitosamente")
     return redirect("login") 
 
-def listarusuario(request):    
-    queryset = request.GET.get("buscar")
-    usuario = User.objects.all().order_by('-id').values()
-    if queryset:
-        usuario=User.objects.filter(Q(username__icontains=queryset)).distinct().order_by('-id').values()
-    paginator = Paginator(usuario, 3)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request,"usuario/listar.html",{'page_obj': page_obj})
-def eliminarusuario(request,id):
-    usuario=User.objects.get(id=id) 
-    usuario.activo=False
-    usuario.eliminado=True
-    usuario.save()
-    messages.success(request, "User eliminado.")
-    return redirect("listarusuario")
-
-def activarusuario(request,id,activo):
-    usuario=User.objects.get(id=id)
-    if activo == 0:
-        usuario.is_staff=True
+def perfil(request):
+    user=User.objects.get(username=request.session['user_logged'])
+    request.session['userName_logged'] = user.last_name + ' '+ user.first_name
+    if request.method=="POST":
+        form=PerfilForm(request.POST)
+        if form.is_valid():
+            messages.success(request, "Perfil actualizado.")
+            user.last_name=form.cleaned_data.get("last_name")
+            user.first_name=form.cleaned_data.get("first_name")
+            user.email=form.cleaned_data.get("email")
+            user.save()
+            return redirect("perfil")
     else:
-        usuario.is_staff=False
-    usuario.save()
-    messages.success(request, "User actualizado.")
-    return redirect("listarusuario") 
+        initial_dict = {
+            "last_name":user.last_name,"first_name":user.first_name,"email":user.email
+        }
+        form=PerfilForm(initial=initial_dict)
+        context={"form":form,'userNameLogged':request.session['userName_logged']} 
+        return render(request,"datospersonales/edit.html",context)
+    
+
 
 def listarpermiso(request):    
     queryset = request.GET.get("buscar")

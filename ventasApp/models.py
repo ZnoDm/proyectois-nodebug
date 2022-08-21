@@ -64,9 +64,8 @@ DNI = 'DNI'
 RUC = 'RUC'
 PASAPORTE = 'PASAPORTE'
 OTRO = 'OTRO'
-TIPODOCUMENTOIDENTIDAD  = (
-        (DNI, 'Documento de Identidad'),        
-        (RUC, 'Documento Nacional de Identidad'),
+TIPODOCUMENTOIDENTIDAD  = (     
+        (DNI, 'Documento Nacional de Identidad'),
         (RUC, 'Registro Único de Contribuyentes'),
         (PASAPORTE, 'Pasaporte'),
         (OTRO, 'Otro'),

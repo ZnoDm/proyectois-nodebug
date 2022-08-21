@@ -3,6 +3,30 @@ from django.forms import fields
 from .models import *
 from django.contrib.auth.models import User
 
+class PerfilForm(forms.Form):
+
+    last_name = forms.CharField(max_length=150)
+    first_name = forms.CharField(max_length=150)
+    email = forms.EmailField()
+class UsuarioForm(forms.Form):
+
+    last_name = forms.CharField(max_length=150)
+    first_name = forms.CharField(max_length=150)
+    email = forms.EmailField()
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(max_length=120,widget=forms.PasswordInput)
+    is_superuser = forms.BooleanField(required=False)
+    is_staff = forms.BooleanField(required=False)
+    is_active = forms.BooleanField(required=False)
+class UsuarioEditForm(forms.Form):
+
+    last_name = forms.CharField(max_length=150)
+    first_name = forms.CharField(max_length=150)
+    email = forms.EmailField()
+    username = forms.CharField(max_length=150)
+    is_superuser = forms.BooleanField(required=False)
+    is_staff = forms.BooleanField(required=False)
+    is_active = forms.BooleanField(required=False)
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model=Categoria
