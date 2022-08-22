@@ -130,10 +130,7 @@ class PedidoVentaForm(forms.ModelForm):
             'fechaEntrega',
             'tipoMoneda',
             'tasaCambio',
-            'subtotal',
             'tasaIgv',
-            'descuento',
-            'total',
             'estado'
             ]
         widgets = {
@@ -148,17 +145,13 @@ class OrdenCompraForm(forms.ModelForm):
         fields = [
             'trabajador',
             'proveedor',
-            'cliente',
             'formaPago',
             'codigo',
             'fechaEmision',
             'fechaEntrega',
             'tipoMoneda',
             'tasaCambio',
-            'subtotal',
             'tasaIgv',
-            'descuento',
-            'total',
             'estado',
         ]
         widgets = {

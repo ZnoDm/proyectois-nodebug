@@ -3,7 +3,7 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-<div class="container">
+<div class="p-3">
     <div class="card card-info mx-4 my-4">
         <div class="card-header">
             <h1 class="card-title">AGREGAR ORDEN DE COMPRA</h1>
@@ -11,7 +11,86 @@
         <div class="card-body">
             <form method="post">
             {% csrf_token %}
-            {{ form | crispy}}
+            <div class="row">                
+                <div class="col-12 col-lg-4">
+                    {{ form.codigo|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-5">
+                    
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.estado|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-6">
+                    {{ form.trabajador|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-6">
+                    {{ form.proveedor|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.formaPago|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.fechaEmision|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.fechaEntrega |as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.tipoMoneda|as_crispy_field }}
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.tasaCambio|as_crispy_field }}
+                </div>     
+                <div class="col-12 col-lg-3">
+                    {{ form.tasaIgv|as_crispy_field }}
+                </div>         
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar Producto</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-3">
+                <table class="table" id="tableProductos">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">PRODUCTO</th>
+                        <th scope="col">PRECIO UNITARIO</th>
+                        <th scope="col">DESCUENTO UNITARIO</th>                        
+                        <th scope="col">CANTIDAD</th>
+                        <th scope="col">PRECIO TOTAL</th>
+                        <th scope="col">ACCIONES</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-end">
+                        <div class="">
+                            <p>
+                                <strong> Sub Total:</strong>
+                                <span id="sub-total">0.00</span>
+                            </p>
+                            <p>
+                                <strong> Descuento:</strong>
+                                <span id="descuento">0.00</span>
+                            </p>
+                            <p>
+                                <strong> Total:</strong>
+                                <span id="totales">0.00</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="d-flex justify-content-end">
                 <a href="{% url 'listarordenCompra' %}" class="btn btn-secondary">Cancelar</a> &nbsp;
                 <button type="submit" class="btn btn-primary">Guardar</button>
