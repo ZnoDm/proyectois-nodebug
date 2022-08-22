@@ -19,7 +19,6 @@ class UsuarioForm(forms.Form):
     is_staff = forms.BooleanField(required=False)
     is_active = forms.BooleanField(required=False)
 class UsuarioEditForm(forms.Form):
-
     last_name = forms.CharField(max_length=150)
     first_name = forms.CharField(max_length=150)
     email = forms.EmailField()
@@ -27,6 +26,8 @@ class UsuarioEditForm(forms.Form):
     is_superuser = forms.BooleanField(required=False)
     is_staff = forms.BooleanField(required=False)
     is_active = forms.BooleanField(required=False)
+class GroupForm(forms.Form):
+    name = forms.CharField(max_length=150)
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model=Categoria
@@ -89,7 +90,6 @@ class ProductoForm(forms.ModelForm):
             'precioUnitario',
             ]
 
-
 class ProveedorForm(forms.ModelForm):
     class Meta:
         model=Proveedor
@@ -121,12 +121,7 @@ class TrabajadorForm(forms.ModelForm):
             'telefono',
             'sexo',
             'activo',
-            'usuarioRegistro',
-            'fechaRegistro',
             ]
-        widgets = {
-            'fechaRegistro': forms.TextInput(attrs={'type': 'date'}),
-        }
 
         
 class TipoClienteForm(forms.ModelForm):

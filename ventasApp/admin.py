@@ -1,11 +1,7 @@
 from django.contrib import admin
 from ventasApp.models import Cliente,Categoria
+from django.contrib.auth.models import Permission
 # Register your models here.
 
-class ClienteAdmin(admin.ModelAdmin):
-    list_display=("nombres","activo")
-class CategoriaAdmin(admin.ModelAdmin):
-    list_display=("descripcion","activo")
 
-admin.site.register(Cliente, ClienteAdmin)
-admin.site.register(Categoria, CategoriaAdmin)
+admin.site.register(Permission)

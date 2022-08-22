@@ -34,6 +34,7 @@
                         <th>Login</th>
                         <th>Nombres</th>
                         <th>Staff</th>
+                        <th><center>Rol</center></th>
                         <th><center>Opciones</center></th>
                     </tr>
                 </thead>
@@ -50,6 +51,7 @@
                             <span class="slider round"></span>
                         </label>
                     </td>
+                    <td style="text-align: center;"><a href="{% url 'admin:index' %}" class="btn btn-success btn-sm">AGREGAR ROL</i></a></td>
                     <td style="text-align: center;">
                         <a href="#" onclick="resetPasswordUser('{{itemusuario.id}}')" class="btn btn-warning btn-sm"><i class="fas fa-cog"></i></a>
                         <a href="{% url 'editarusuario' itemusuario.id %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>

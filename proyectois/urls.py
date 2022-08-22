@@ -28,7 +28,7 @@ urlpatterns = [
     path('permiso/',include('seguridadApp.routes.permiso'),name="permiso"), 
     path('role/',include('seguridadApp.routes.role'),name="role"), 
     
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls,name="admin"),
 
     path('categoria/', include('ventasApp.routes.categoria'),name="categoria"),
     path('cliente/', include('ventasApp.routes.cliente'),name="cliente"),

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import datetime
 # User model ya creado.
 #=== VISTAS ESTRUCTURA (VALOR - LO Q SE MUESTRA) ====
 
@@ -29,8 +29,8 @@ class Trabajador(models.Model):
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
 
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)

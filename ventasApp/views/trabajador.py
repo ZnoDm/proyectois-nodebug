@@ -5,6 +5,7 @@ from django.db.models import Q
 from ventasApp.forms import TrabajadorForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+import datetime
 # Create your views here.
 def agregartrabajador(request):
     if request.method=="POST":
@@ -14,7 +15,8 @@ def agregartrabajador(request):
             trabajador_exits = (Trabajador.objects.filter(email=email_trabajador).count()>0)
             if trabajador_exits:
                 messages.info(request, "Trabajador ya existe.")
-                form=TrabajadorForm()
+                form=TrabajadorForm(initial={'fechaRegistro': 
+                datetime.datetime.now()})
                 context={'form':form}
                 return render(request,"trabajador/agregar.html",context) 
             else:
@@ -23,7 +25,8 @@ def agregartrabajador(request):
                 return redirect("listartrabajador") 
 
     else:
-        form=TrabajadorForm()
+        form=TrabajadorForm(initial={'fechaRegistro': 
+                datetime.datetime.now()})
         context={'form':form} 
         return render(request,"trabajador/agregar.html",context) 
 

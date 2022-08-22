@@ -65,24 +65,3 @@ def perfil(request):
         context={"form":form,'userNameLogged':request.session['userName_logged']} 
         return render(request,"datospersonales/edit.html",context)
     
-
-
-def listarpermiso(request):    
-    queryset = request.GET.get("buscar")
-    permiso = Permission.objects.all().order_by('-id').values()
-    if queryset:
-        permiso = Permission.objects.filter(Q(name__icontains=queryset)).distinct().order_by('-id').values() 
-    paginator = Paginator(permiso, 8)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request,"permiso/listar.html",{'page_obj': page_obj})
-
-def listarrole(request):    
-    queryset = request.GET.get("buscar")
-    role = Group.objects.all().order_by('-id').values()
-    if queryset:
-        role = Group.objects.filter(Q(name__icontains=queryset)).distinct().order_by('-id').values() 
-    paginator = Paginator(role,3)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request,"role/listar.html",{'page_obj': page_obj})
