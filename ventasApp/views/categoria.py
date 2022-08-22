@@ -5,6 +5,7 @@ from django.db.models import Q
 from ventasApp.forms import CategoriaForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+import datetime
 # Create your views here.
 def agregarcategoria(request):
     if request.method=="POST":
@@ -20,6 +21,9 @@ def agregarcategoria(request):
             else:
                 messages.success(request, "Categoria registrada.")
                 form.save() 
+                element = Categoria.objects.all().last()
+                element.usuarioRegistro =  request.session['user_logged']
+                element.save()
                 return redirect("listarcategoria") 
 
     else:
@@ -47,6 +51,10 @@ def editarcategoria(request,id):
             messages.success(request, "Categoria actualizada.")
             form.usuarioModificacion = request.session['user_logged']
             form.save() 
+            elemento=Categoria.objects.get(idCategoria=id)
+            elemento.usuarioModificacion = request.session['user_logged']
+            elemento.fechaModificacion = datetime.datetime.now()
+            elemento.save()
             return redirect("listarcategoria") 
     else:
         form=CategoriaForm(instance=categoria)
@@ -57,6 +65,8 @@ def eliminarcategoria(request,id):
     categoria=Categoria.objects.get(idCategoria=id) 
     categoria.activo=False
     categoria.eliminado=True
+    categoria.usuarioEliminacion = request.session['user_logged']
+    categoria.fechaEliminacion = datetime.datetime.now()
     categoria.save()
     messages.success(request, "Categoria eliminada.")
     return redirect("listarcategoria")

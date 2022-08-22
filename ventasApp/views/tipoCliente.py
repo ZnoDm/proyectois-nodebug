@@ -5,6 +5,7 @@ from django.db.models import Q
 from ventasApp.forms import TipoClienteForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+import datetime
 # Create your views here.
 def agregartipoCliente(request):
     if request.method=="POST":
@@ -20,6 +21,9 @@ def agregartipoCliente(request):
             else:
                 messages.success(request, "TipoCliente registrada.")
                 form.save() 
+                element = TipoCliente.objects.all().last()
+                element.usuarioRegistro =  request.session['user_logged']
+                element.save()
                 return redirect("listartipoCliente") 
 
     else:
@@ -46,6 +50,10 @@ def editartipoCliente(request,id):
         if form.is_valid():
             messages.success(request, "Cliente actualizado.")
             form.save() 
+            elemento=TipoCliente.objects.get(idTipoCliente=id)
+            elemento.usuarioModificacion = request.session['user_logged']
+            elemento.fechaModificacion = datetime.datetime.now()
+            elemento.save()
             return redirect("listartipoCliente") 
     else:
         form=TipoClienteForm(instance=tipoCliente)
@@ -56,6 +64,8 @@ def eliminartipoCliente(request,id):
     tipoCliente=TipoCliente.objects.get(idTipoCliente=id) 
     tipoCliente.activo=False
     tipoCliente.eliminado=True
+    tipoCliente.usuarioEliminacion = request.session['user_logged']
+    tipoCliente.fechaEliminacion = datetime.datetime.now()
     tipoCliente.save()
     messages.success(request, "TipoCliente eliminada.")
     return redirect("listartipoCliente")
