@@ -50,11 +50,11 @@ class ClienteForm(forms.ModelForm):
             'documentoIdentidad',
             'activo',
             ]
+            
 class FormaPagoForm(forms.ModelForm):
     class Meta:
         model=FormaPago
         fields=[
-            'idFormaPago',
             'descripcion',
             'nroCuotas',
             'frecuencia',

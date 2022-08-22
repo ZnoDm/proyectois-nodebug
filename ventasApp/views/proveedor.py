@@ -5,6 +5,7 @@ from django.db.models import Q
 from ventasApp.forms import ProveedorForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+import datetime
 # Create your views here.
 def agregarproveedor(request):
     if request.method=="POST":
@@ -20,6 +21,9 @@ def agregarproveedor(request):
             else:
                 messages.success(request, "Proveedor registrada.")
                 form.save() 
+                element = Proveedor.objects.all().last()
+                element.usuarioRegistro =  request.session['user_logged']
+                element.save()
                 return redirect("listarproveedor") 
 
     else:
@@ -46,6 +50,10 @@ def editarproveedor(request,id):
         if form.is_valid():
             messages.success(request, "Proveedor actualizada.")
             form.save() 
+            elemento = Proveedor.objects.get(idProveedor=id)
+            elemento.usuarioModificacion = request.session['user_logged']
+            elemento.fechaModificacion = datetime.datetime.now()
+            elemento.save()
             return redirect("listarproveedor") 
     else:
         form=ProveedorForm(instance=proveedor)
@@ -56,6 +64,8 @@ def eliminarproveedor(request,id):
     proveedor=Proveedor.objects.get(idProveedor=id) 
     proveedor.activo=False
     proveedor.eliminado=True
+    proveedor.usuarioEliminacion = request.session['user_logged']
+    proveedor.fechaEliminacion = datetime.datetime.now()
     proveedor.save()
     messages.success(request, "Proveedor eliminada.")
     return redirect("listarproveedor")

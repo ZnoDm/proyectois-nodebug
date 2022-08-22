@@ -2,7 +2,7 @@
 {% block title %} Boutique | Forma Pago {% endblock title %}
 
 {% block content %}
-    <div class="container">
+    <div class="p-3">
         <div class="card mt-3">
         <div class="card-header d-flex justify-content-between p-3">
             <div>
@@ -32,6 +32,9 @@
                     <tr>
                         <th>Id</th>
                         <th>Descripción</th>
+                        <th>N° Cuotas</th>
+                        <th>Frecuencia</th>
+                        <th>Interes</th>
                         <th>Activo</th>
                         <th><center>Opciones</center></th>
                     </tr>
@@ -41,6 +44,9 @@
                 <tr>
                     <td>{{ itemformaPago.idFormaPago}}</td>
                     <td>{{ itemformaPago.descripcion }}</td>
+                    <td>{{ itemformaPago.nroCuotas}}</td>
+                    <td>{{ itemformaPago.frecuencia }}</td>
+                    <td>{{ itemformaPago.interes }}</td>
                     <td>
                         <label class="switch">
                             <input type="checkbox" onclick="activarformaPago('{{itemformaPago.idFormaPago}}','{{itemformaPago.activo}}')" {% if itemformaPago.activo %} checked {% endif %} >
@@ -55,7 +61,7 @@
                 {% endfor %}
                 {% else %}
                 <tr style="text-align: center;">
-                    <td colspan="4">
+                    <td colspan="7">
                         <p>No hay Registros</p>
                     </td>
                 </tr>

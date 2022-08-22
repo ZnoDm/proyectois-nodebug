@@ -116,7 +116,7 @@ class FormaPago(models.Model):
     descripcion = models.CharField(max_length=100)
     nroCuotas = models.IntegerField()
     frecuencia = models.CharField(max_length=50,choices=FRECUENCIA, default=BIMENSUAL)
-    interes = models.DecimalField(max_digits=3,decimal_places=3)
+    interes = models.FloatField()
 
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
@@ -128,7 +128,7 @@ class FormaPago(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.descripcion
+        return self
 
 class Categoria(models.Model):
     idCategoria=models.AutoField(primary_key=True)
@@ -157,7 +157,7 @@ class Producto(models.Model):
     modelo = models.CharField(max_length=100)
     stock = models.IntegerField()
 
-    precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
+    precioUnitario = models.FloatField()
 
     urlImagen = models.CharField(max_length=1000)
     nombreImagen = models.CharField(max_length=1000)
@@ -210,14 +210,14 @@ class PedidoVenta(models.Model):
     fechaEntrega = models.DateField()
 
     tipoMoneda= models.CharField(max_length=50,choices=TIPOMONEDA, default=SOLES)
-    tasaCambio = models.DecimalField(max_digits=3,decimal_places=3)
+    tasaCambio = models.FloatField()
 
-    subtotal = models.DecimalField(max_digits=3,decimal_places=3)
+    subtotal = models.FloatField()
 
-    tasaIgv = models.DecimalField(max_digits=3,decimal_places=3)
-    descuento = models.DecimalField(max_digits=3,decimal_places=3)
+    tasaIgv = models.FloatField()
+    descuento = models.FloatField()
     
-    total = models.DecimalField(max_digits=3,decimal_places=3) 
+    total = models.FloatField() 
 
     estado = models.IntegerField(choices=ESTADO, default=ABIERTA)
 
@@ -239,9 +239,9 @@ class DetallePedidoVenta(models.Model):
     pedidoVenta = models.ForeignKey(PedidoVenta, on_delete = models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
     cantidad = models.IntegerField()
-    precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    descuentoUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    precio = models.DecimalField(max_digits=3,decimal_places=3)
+    precioUnitario = models.FloatField()
+    descuentoUnitario = models.FloatField()
+    precio = models.FloatField()
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')
@@ -292,14 +292,14 @@ class OrdenCompra(models.Model):
     fechaEntrega = models.DateField()
 
     tipoMoneda= models.CharField(max_length=50,choices=TIPOMONEDA, default=SOLES)
-    tasaCambio = models.DecimalField(max_digits=3,decimal_places=3)
+    tasaCambio = models.FloatField()
 
-    subtotal = models.DecimalField(max_digits=3,decimal_places=3)
+    subtotal = models.FloatField()
 
-    tasaIgv = models.DecimalField(max_digits=3,decimal_places=3)
-    descuento = models.DecimalField(max_digits=3,decimal_places=3)
+    tasaIgv = models.FloatField()
+    descuento = models.FloatField()
     
-    total = models.DecimalField(max_digits=3,decimal_places=3) 
+    total = models.FloatField() 
 
     estado = models.IntegerField(choices=ESTADO, default=ABIERTA)
 
@@ -320,9 +320,9 @@ class DetalleOrdenCompra(models.Model):
     producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
 
     cantidad = models.IntegerField()
-    precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    descuentoUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    precio = models.DecimalField(max_digits=3,decimal_places=3)
+    precioUnitario = models.FloatField()
+    descuentoUnitario = models.FloatField()
+    precio = models.FloatField()
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')
@@ -378,9 +378,9 @@ class DetalleNotaAlmacen(models.Model):
 
     producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
     cantidad = models.IntegerField()
-    precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    descuentoUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    precio = models.DecimalField(max_digits=3,decimal_places=3)
+    precioUnitario = models.FloatField()
+    descuentoUnitario = models.FloatField()
+    precio = models.FloatField()
 
     cantidadTotal = models.IntegerField()
     cantidadUsada = models.IntegerField()
@@ -439,9 +439,9 @@ class DetalleDocumentoVenta(models.Model):
     producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
 
     cantidad = models.IntegerField()
-    precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    descuentoUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    precio = models.DecimalField(max_digits=3,decimal_places=3)
+    precioUnitario = models.FloatField()
+    descuentoUnitario = models.FloatField()
+    precio = models.FloatField()
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')
@@ -487,9 +487,9 @@ class DetalleDocumentoCompra(models.Model):
     producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
 
     cantidad = models.IntegerField()
-    precioUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    descuentoUnitario = models.DecimalField(max_digits=3,decimal_places=3)
-    precio = models.DecimalField(max_digits=3,decimal_places=3)
+    precioUnitario = models.FloatField()
+    descuentoUnitario = models.FloatField()
+    precio = models.FloatField()
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')
