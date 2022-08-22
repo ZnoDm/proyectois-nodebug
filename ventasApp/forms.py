@@ -73,7 +73,13 @@ class ProductoForm(forms.ModelForm):
             'modelo',
             'stock',
             'precioUnitario',
+            'urlImagen',
+            'nombreImagen'
             ]
+        widgets = {
+            'urlImagen': forms.HiddenInput(),
+            'nombreImagen': forms.HiddenInput()
+        }
 
 class ProveedorForm(forms.ModelForm):
     class Meta:

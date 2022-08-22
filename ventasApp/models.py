@@ -159,9 +159,9 @@ class Producto(models.Model):
 
     precioUnitario = models.FloatField()
 
-    urlImagen = models.CharField(max_length=1000)
-    nombreImagen = models.CharField(max_length=1000)
-    fechaCargaImagen = models.DateField()
+    urlImagen = models.CharField(max_length=1000,blank=True, null=True)
+    nombreImagen = models.CharField(max_length=1000,blank=True, null=True)
+    fechaCargaImagen = models.DateField(blank=True, null=True)
 
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
