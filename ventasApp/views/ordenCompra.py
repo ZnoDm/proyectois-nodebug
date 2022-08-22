@@ -9,12 +9,12 @@ from django.core.paginator import Paginator
 def agregarordenCompra(request):
     list_product = Producto.objects.all().filter(eliminado=False).values()
     if request.method=="POST":
-        form=PedidoVentaForm(request.POST)
+        form=OrdenCompraForm(request.POST)
 
         arregloObjetoProductos = []  
-        pedidoVenta_subtotal = 0.0
-        pedidoVenta_descuento = 0.0
-        pedidoVenta_total = 0.0
+        ordenCompra_subtotal = 0.0
+        ordenCompra_descuento = 0.0
+        ordenCompra_total = 0.0
 
         idProducto = request.POST.getlist('idProducto[]')
         idCantidad = request.POST.getlist('idCantidad[]')
@@ -23,9 +23,9 @@ def agregarordenCompra(request):
         idPrecioProductoTotal = request.POST.getlist('idPrecioProductoTotal[]')
         i=0
         while i<len(idProducto):
-            pedidoVenta_subtotal = pedidoVenta_subtotal+(float(idCantidad[i])*float(idPrecioUnitario[i]))
-            pedidoVenta_descuento = pedidoVenta_descuento+float(idDescuentoUnitario[i])
-            pedidoVenta_total = pedidoVenta_total+float(idPrecioProductoTotal[i])
+            ordenCompra_subtotal = ordenCompra_subtotal+(float(idCantidad[i])*float(idPrecioUnitario[i]))
+            ordenCompra_descuento = ordenCompra_descuento+float(idDescuentoUnitario[i])
+            ordenCompra_total = ordenCompra_total+float(idPrecioProductoTotal[i])
 
             arregloObjetoProductos.append({
                 'Producto':idProducto[i],
@@ -36,9 +36,9 @@ def agregarordenCompra(request):
             })
             i+=1
         
-        pedidoVenta = PedidoVenta.objects.create(
+        ordenCompra = OrdenCompra.objects.create(
                         trabajador = Trabajador.objects.get(idTrabajador=form['trabajador'].value()),
-                        cliente = Cliente.objects.get(idCliente=form['cliente'].value()),
+                        proveedor = Proveedor.objects.get(idProveedor=form['proveedor'].value()),
                         formaPago = FormaPago.objects.get(idFormaPago=form['formaPago'].value()),
                         codigo = form['codigo'].value(),
                         fechaEmision = form['fechaEmision'].value(),
@@ -49,18 +49,18 @@ def agregarordenCompra(request):
                         tasaIgv = form['tasaIgv'].value(),
                         estado = form['estado'].value(),
 
-                        subtotal = pedidoVenta_subtotal,
-                        descuento = pedidoVenta_descuento,
-                        total = pedidoVenta_total,
+                        subtotal = ordenCompra_subtotal,
+                        descuento = ordenCompra_descuento,
+                        total = ordenCompra_total,
 
                         usuarioRegistro = request.session['user_logged']
                     )
-        pedidoVenta.save()
-        element = PedidoVenta.objects.all().last()
+        ordenCompra.save()
+        element = OrdenCompra.objects.all().last()
 
         for p in arregloObjetoProductos:
-            detalle = DetallePedidoVenta(
-                pedidoVenta = element,
+            detalle = DetalleOrdenCompra(
+                ordenCompra = element,
                 producto= Producto.objects.get(idProducto=p['Producto']), 
                 cantidad=p['Cantidad'],
                 precioUnitario=p['PrecioUnitario'],
@@ -69,7 +69,7 @@ def agregarordenCompra(request):
                 usuarioRegistro = request.session['user_logged']
             )
             detalle.save()
-        messages.success(request, "Pedido de Venta registrada.")
+        messages.success(request, "Orden de Compra registrada.")
         return redirect("listarordenCompra") 
     
     else:

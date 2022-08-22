@@ -20,12 +20,12 @@ def agregarnotaAlmacen(request):
             else:
                 
                 messages.success(request, "Nota de Almacén registrada.")
-                pedidoVenta_exits = PedidoVenta.objects.get(idPedidoVenta=form['pedidoVenta'].value())
-                ordenCompra_exits = OrdenCompra.objects.get(idOrdenCompra=form['ordenCompra'].value())
                 form.save() 
                 element = NotaAlmacen.objects.all().last()
 
-                if form['pedidoVenta'].value() != None:
+                if (form['pedidoVenta'].value() != None) and form['pedidoVenta'].value() != '':
+                    
+                    pedidoVenta_exits = PedidoVenta.objects.get(idPedidoVenta=form['pedidoVenta'].value())
                     detallePedidoVenta = DetallePedidoVenta.objects.all().filter(pedidoVenta=pedidoVenta_exits).values()
 
                     for p in detallePedidoVenta:
@@ -46,8 +46,11 @@ def agregarnotaAlmacen(request):
                         Vproducto.stock = int(Vproducto.stock) -int(p['cantidad'])
                         Vproducto.save()
                         detalle.save()
-                if form['ordenCompra'].value() != None:
-                    detalleOrdenCompra = DetalleOrdenCompra.objects.all().filter(pedidoVenta=ordenCompra_exits).values()
+                        
+                if (form['ordenCompra'].value() != None) and form['ordenCompra'].value() != '':
+                    
+                    ordenCompra_exits = OrdenCompra.objects.get(idOrdenCompra=form['ordenCompra'].value())
+                    detalleOrdenCompra = DetalleOrdenCompra.objects.all().filter(ordenCompra=ordenCompra_exits).values()
 
                     for p in detalleOrdenCompra:
                         
@@ -62,9 +65,9 @@ def agregarnotaAlmacen(request):
                             usuarioRegistro = request.session['user_logged'],
                             cantidadTotal = int(Vproducto.stock),
                             cantidadUsada = int(p['cantidad']),
-                            cantidadSaldo = int(Vproducto.stock) -int(p['cantidad']),
+                            cantidadSaldo = int(Vproducto.stock) + int(p['cantidad']),
                         )
-                        Vproducto.stock = int(Vproducto.stock) -int(p['cantidad'])
+                        Vproducto.stock = int(Vproducto.stock) + int(p['cantidad'])
                         Vproducto.save()
                         detalle.save()
                 

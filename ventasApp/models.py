@@ -311,7 +311,7 @@ class OrdenCompra(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.idOrdenCompra
+        return self.codigo
 
 class DetalleOrdenCompra(models.Model):
     idDetalleOrdenCompra = models.AutoField(primary_key=True)
