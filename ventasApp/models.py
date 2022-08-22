@@ -48,8 +48,8 @@ class TipoCliente(models.Model):
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
 
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -88,8 +88,9 @@ class Cliente(models.Model):
 
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+        
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -119,8 +120,8 @@ class FormaPago(models.Model):
 
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -135,8 +136,8 @@ class Categoria(models.Model):
 
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -164,15 +165,15 @@ class Producto(models.Model):
 
     activo = models.BooleanField(default= True)
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.idProducto
 
 #========= VISTA TIPOMONEDA =========
 SOLES = 'SOLES'
@@ -221,8 +222,8 @@ class PedidoVenta(models.Model):
     estado = models.IntegerField(choices=ESTADO, default=ABIERTA)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -243,8 +244,8 @@ class DetallePedidoVenta(models.Model):
     precio = models.DecimalField(max_digits=3,decimal_places=3)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -268,8 +269,8 @@ class Proveedor(models.Model):
 
     eliminado = models.BooleanField(default= False)
 
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -303,15 +304,15 @@ class OrdenCompra(models.Model):
     estado = models.IntegerField(choices=ESTADO, default=ABIERTA)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.codigo
+        return self.idOrdenCompra
 
 class DetalleOrdenCompra(models.Model):
     idDetalleOrdenCompra = models.AutoField(primary_key=True)
@@ -324,15 +325,15 @@ class DetalleOrdenCompra(models.Model):
     precio = models.DecimalField(max_digits=3,decimal_places=3)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.idDetalleOrdenCompra
 
 #========= VISTA TIPO OPERACION =========
 ENTRADA = 'ENTRADA'
@@ -346,9 +347,9 @@ TIPOOPERACION  = (
 
 class NotaAlmacen(models.Model):
     idNotaAlmacen = models.AutoField(primary_key=True)    
-    trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
-    pedidoVenta = models.ForeignKey(PedidoVenta, on_delete = models.CASCADE)
-    ordenCompra = models.ForeignKey(OrdenCompra, on_delete = models.CASCADE)
+    trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE, default=1)
+    pedidoVenta = models.ForeignKey(PedidoVenta, on_delete = models.CASCADE, default=1)
+    ordenCompra = models.ForeignKey(OrdenCompra, on_delete = models.CASCADE, default=1)
     codigo = models.CharField(max_length=10)
 
     fechaEmision = models.DateField()
@@ -361,15 +362,15 @@ class NotaAlmacen(models.Model):
     estado = models.IntegerField(choices=ESTADO, default=ABIERTA)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self
+        return self.idNotaAlmacen
 
 class DetalleNotaAlmacen(models.Model):
     idDetalleNotaAlmacen = models.AutoField(primary_key=True)    
@@ -386,8 +387,8 @@ class DetalleNotaAlmacen(models.Model):
     cantidadSaldo = models.IntegerField()
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -422,8 +423,8 @@ class DocumentoVenta(models.Model):
     tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=BOLETA)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -443,8 +444,8 @@ class DetalleDocumentoVenta(models.Model):
     precio = models.DecimalField(max_digits=3,decimal_places=3)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -455,10 +456,11 @@ class DetalleDocumentoVenta(models.Model):
 
 
 class DocumentoCompra(models.Model):
-    idDocumentoCompra = models.AutoField(primary_key=True)    
+    idDocumentoCompra = models.AutoField(primary_key=True)      
+    ordenCompra = models.ForeignKey(OrdenCompra, on_delete = models.CASCADE)
+
     trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
     proveedor = models.ForeignKey(Proveedor, on_delete = models.CASCADE)
-    ordenCompra = models.ForeignKey(OrdenCompra, on_delete = models.CASCADE)
 
     fechaEmision = models.DateField()
     fechaEntrega = models.DateField()
@@ -469,8 +471,8 @@ class DocumentoCompra(models.Model):
     tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=FACTURA)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
@@ -490,8 +492,8 @@ class DetalleDocumentoCompra(models.Model):
     precio = models.DecimalField(max_digits=3,decimal_places=3)
 
     eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300)
-    fechaRegistro = models.DateField()
+    usuarioRegistro = models.CharField(max_length=300,default='admin')
+    fechaRegistro = models.DateField(default= datetime.datetime.now())
     usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
     fechaModificacion = models.DateField(blank=True, null=True)
     usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)

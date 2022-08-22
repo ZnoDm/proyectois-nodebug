@@ -22,6 +22,9 @@ def agregartrabajador(request):
             else:
                 messages.success(request, "Trabajador registrada.")
                 form.save() 
+                element = Trabajador.objects.all().last()
+                element.usuarioRegistro =  request.session['user_logged']
+                element.save()
                 return redirect("listartrabajador") 
 
     else:
@@ -39,7 +42,6 @@ def listartrabajador(request):
     paginator = Paginator(trabajador, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context={'trabajador':trabajador}
     return render(request,"trabajador/listar.html",{'page_obj': page_obj})
 
 def editartrabajador(request,id):
@@ -49,6 +51,10 @@ def editartrabajador(request,id):
         if form.is_valid():
             messages.success(request, "Trabajador actualizado.")
             form.save() 
+            elemento=Trabajador.objects.get(idTrabajador=id)
+            elemento.usuarioModificacion = request.session['user_logged']
+            elemento.fechaModificacion = datetime.datetime.now()
+            elemento.save()
             return redirect("listartrabajador") 
     else:
         form=TrabajadorForm(instance=trabajador)
@@ -59,6 +65,8 @@ def eliminartrabajador(request,id):
     trabajador=Trabajador.objects.get(idTrabajador=id) 
     trabajador.activo=False
     trabajador.eliminado=True
+    trabajador.usuarioEliminacion = request.session['user_logged']
+    trabajador.fechaEliminacion = datetime.datetime.now()
     trabajador.save()
     messages.success(request, "Trabajador eliminado.")
     return redirect("listartrabajador")
