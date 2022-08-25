@@ -17,7 +17,41 @@
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-12 col-lg-6">
-                        {{ form | crispy}}
+                        <div class="row">                
+                            <div class="col-12 col-lg-5">
+                                {{ form.codigo|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-lg-7">
+                                
+                            </div>
+                            <div class="col-12">
+                                {{ form.categoria|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ form.nombre|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ form.descripcion|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ form.marca|as_crispy_field }}
+                            </div>
+                            <div class="col-12">
+                                {{ form.modelo|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                {{ form.stock|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                {{ form.precioUnitario|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                {{ form.urlImagen|as_crispy_field }}
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                {{ form.nombreImagen|as_crispy_field }}
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="col-12 col-lg-6 pb-2">

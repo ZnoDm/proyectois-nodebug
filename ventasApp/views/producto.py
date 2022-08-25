@@ -30,7 +30,8 @@ def agregarproducto(request):
                 return redirect("listarproducto") 
 
     else:
-        form=ProductoForm()
+        cantidad = Producto.objects.count()
+        form=ProductoForm(initial={'codigo': str('P-') + str(cantidad+1)})
         form.fields["categoria"].choices = [(r['idCategoria'],r['descripcion']) for r in Categoria.objects.exclude(eliminado=1).values()]
         context={'form':form} 
         return render(request,"producto/agregar.html",context) 

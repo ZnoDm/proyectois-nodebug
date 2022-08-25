@@ -1,12 +1,21 @@
 from django.shortcuts import render,redirect 
 from django.http import JsonResponse
+from ventasApp.models import * 
 
 def get_countVentas(request,*args,**kwargs):
-    data={'cantidad':100}
+    cantidad = PedidoVenta.objects.count()
+    data={
+        'tipo':'ventas',
+        'cantidad': cantidad
+    }
     return JsonResponse(data)
 
 def get_countCompras(request,*args,**kwargs):
-    data={'cantidad':50}
+    cantidad = OrdenCompra.objects.count()
+    data={
+        'tipo':'compras',
+        'cantidad':cantidad
+    }
     return JsonResponse(data)
 
 def get_dataLine(request,*args,**kwargs):

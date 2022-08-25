@@ -78,8 +78,10 @@ class ProductoForm(forms.ModelForm):
             ]
         widgets = {
             'urlImagen': forms.HiddenInput(),
-            'nombreImagen': forms.HiddenInput()
+            'nombreImagen': forms.HiddenInput(),
+            'codigo': forms.TextInput(attrs={'readonly': True})
         }
+        
 
 class ProveedorForm(forms.ModelForm):
     class Meta:
@@ -136,6 +138,7 @@ class PedidoVentaForm(forms.ModelForm):
         widgets = {
             'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
+            'codigo': forms.TextInput(attrs={'readonly': True})
         }
 
 

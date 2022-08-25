@@ -73,7 +73,8 @@ def agregarpedidoVenta(request):
         return redirect("listarpedidoVenta") 
     
     else:
-        form=PedidoVentaForm(initial={'tasaIgv': 0.18,'tasaCambio': 0})
+        cantidad = PedidoVenta.objects.count()
+        form=PedidoVentaForm(initial={'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('PV-') + str(cantidad+1)})
         context={'form':form,'list_product':list_product} 
         return render(request,"pedidoVenta/agregar.html",context) 
 

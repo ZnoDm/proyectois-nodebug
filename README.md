@@ -20,7 +20,7 @@ En la terminal:
 
 	pip3 list
 	pip3 install PyMySQL
-	
+	pip install xhtml2pdf
 
 En el archivo proyectois/__init__.py:
 
