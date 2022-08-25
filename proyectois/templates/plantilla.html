@@ -107,7 +107,24 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item menu-is-opening menu-open">
             <a href="#" class="nav-link ">
-              <p>
+              <p style="font-weight: bold;">
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'dashboard' %}" class="nav-link">                  
+                  <i class="fas fa-chart-line"></i>
+                  <p>
+                    Reportes
+                  </p>
+                </a>
+              </li>
+          </li>
+          <li class="nav-item menu-is-opening menu-open">
+            <a href="#" class="nav-link ">
+              <p style="font-weight: bold;">
                 Accesos
                 <i class="right fas fa-angle-left"></i>
               </p>
@@ -149,7 +166,7 @@
           </li>
           <li class="nav-item menu-is-opening menu-open">
             <a href="#" class="nav-link">              
-              <p>
+              <p style="font-weight: bold;">
                 Registros
                 <i class="right fas fa-angle-left"></i>
               </p>
@@ -216,7 +233,7 @@
           
           <li class="nav-item menu-is-opening menu-open">
             <a href="#" class="nav-link">
-              <p>
+              <p style="font-weight: bold;">
                 Procesos
                 <i class="right fas fa-angle-left"></i>
               </p>

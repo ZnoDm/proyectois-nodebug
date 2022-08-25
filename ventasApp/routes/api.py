@@ -1,6 +1,6 @@
 
 from django.urls import path
-from ventasApp.views.dashboard import *
+from ventasApp.views.api import *
 
 urlpatterns = [
     path('get_countCompras/',get_countCompras ,name="get_countCompras"),
