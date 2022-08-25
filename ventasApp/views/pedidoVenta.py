@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from pydoc import describe
 from django.shortcuts import render,redirect 
 from ventasApp.models import *
@@ -5,6 +6,10 @@ from django.db.models import Q
 from ventasApp.forms import PedidoVentaForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.views.generic import ListView, View
+
+from ventasApp.utils import render_to_pdf
+
 # Create your views here.
 def agregarpedidoVenta(request):
     list_product = Producto.objects.all().filter(eliminado=False).values()
@@ -121,3 +126,11 @@ def activarpedidoVenta(request,id,activo):
     pedidoVenta.save()
     messages.success(request, "Pedido de venta actualizado.")
     return redirect("listarpedidoVenta") 
+    
+def ListPedidoVentaPdf(View, id):
+        pedidoVenta = PedidoVenta.objects.get(idPedidoVenta=id)
+        data = {
+            'pedidoVenta': pedidoVenta
+        }
+        pdf = render_to_pdf('pedidoVenta/listview.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')

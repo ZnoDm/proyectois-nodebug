@@ -1,0 +1,22 @@
+<h1>Lista de Empleados<h1>
+
+<table border="1">
+    <thead>
+        <th>ID</th>
+        <th>Código</th>
+        <th>Fecha Emisión</th>
+        <th>Fecha Entrega</th>
+        <th>Moneda</th>
+        <th>Tasa de Cambio</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ pedidoVenta.idPedidoVenta }}</td>
+            <td>{{ pedidoVenta.codigo }}</td>
+            <td>{{ pedidoVenta.fechaEmision }}</td>
+            <td>{{ pedidoVenta.fechaEntrega }}</td>
+            <td>{{ pedidoVenta.tipoMoneda }}</td>
+            <td>{{ pedidoVenta.tasaCambio }}</td>
+        </tr>
+    </tbody>
+</table>

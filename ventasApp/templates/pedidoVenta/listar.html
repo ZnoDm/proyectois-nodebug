@@ -57,6 +57,7 @@
                     <td>{{ itempedidoventa.descuento }}</td>
                     <td>{{ itempedidoventa.total }}</td>
                     <td style="text-align: center;">
+                        <a href="{% url 'pdfpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="far fa-file-pdf"></i></a>
                         <a href="{% url 'editarpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                         <a href="#" onclick="eliminarpedidoVenta('{{itempedidoventa.idPedidoVenta}}','{{itempedidoventa.codigo}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                     </td>
