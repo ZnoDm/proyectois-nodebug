@@ -8,4 +8,5 @@ urlpatterns = [
     path('edit/<int:id>/',pedidoVenta.editarpedidoVenta,name="editarpedidoVenta"),
     path('delete/<int:id>/',pedidoVenta.eliminarpedidoVenta,name="eliminarpedidoVenta"), 
     path('active/<int:id>/<int:activo>/',pedidoVenta.activarpedidoVenta,name="activarpedidoVenta"),
+    path('pdf/<int:id>',pedidoVenta.ListPedidoVentaPdf,name='pdfpedidoVenta'),
 ]
