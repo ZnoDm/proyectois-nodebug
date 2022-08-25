@@ -43,7 +43,7 @@ def listarcliente(request):
         cliente=Cliente.objects.filter(Q(documentoIdentidad__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idCliente').values() 
     list_cliente = []
     for c in cliente:
-        tipo_cliente=TipoCliente.objects.get(idTipoCliente=c['idCliente'])
+        tipo_cliente=TipoCliente.objects.get(idTipoCliente=c['tipoCliente_id'])
         list_cliente.append({
             'idCliente': c['idCliente'], 'tipoCliente': tipo_cliente, 'nombres': c['nombres'], 'apellidos': c['apellidos'], 'direccion': c['direccion'], 'email': c['email'], 'telefono': c['telefono'], 'tipoDocumentoIdentidad': c['tipoDocumentoIdentidad'], 'documentoIdentidad': c['documentoIdentidad'], 'activo': c['activo'], 'eliminado': c['eliminado'], 'usuarioRegistro': c['usuarioRegistro'], 'fechaRegistro': c['fechaRegistro'], 'usuarioModificacion': c['usuarioModificacion'], 'fechaModificacion': c['fechaModificacion'], 'usuarioEliminacion': c['usuarioEliminacion'], 'fechaEliminacion': c['fechaEliminacion']
         })

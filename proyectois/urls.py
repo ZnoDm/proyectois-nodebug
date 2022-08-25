@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 
 from seguridadApp.views.views import acceder,home,salir,perfil
-
+from ventasApp.views.views import dashboard
 urlpatterns = [
     path('', acceder, name='login'),
     path('home/', home, name='home'),
@@ -40,4 +40,7 @@ urlpatterns = [
     path('pedidoVenta/', include('ventasApp.routes.pedidoVenta'),name="pedidoVenta"),
     path('ordenCompra/', include('ventasApp.routes.ordenCompra'),name="ordenCompra"),
     path('notaAlmacen/', include('ventasApp.routes.notaAlmacen'),name="notaAlmacen"),
+
+    path('dashboard/',dashboard,name="dashboard"),
+    path('api/', include('ventasApp.routes.api'),name="api"),
 ]

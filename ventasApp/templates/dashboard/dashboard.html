@@ -1,0 +1,170 @@
+{% extends "plantilla.html" %}
+{% block title %} Boutique | Categoria {% endblock title %}
+{% block css %} 
+<style>
+    .contador{
+        height:155px;
+        width: 320px;
+        transform: rotate(180deg);
+        margin: 200px 100px;
+        position: relative;
+    
+    }
+    .numero{
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        font-size: 12.8em;
+        font-weight: bold;
+        font-family:  sans-serif;
+        color: #555;
+        position: absolute;
+        transform: rotate(-180deg);
+        mix-blend-mode: screen;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .color_fondo{
+        transition: .2s;
+        transform-origin: bottom;
+        position: absolute;
+        display: block;
+        height: 0%;
+        width: 100%;
+        background-color: rgb(2, 5, 190);
+    }
+</style>
+{% endblock %}
+ 
+{% block content %}
+
+<div class="p-3">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-6">
+                    <div class="contador">
+                        <div class="color_fondo" id="fondo_color_ventas"></div>
+                        <div class="numero" id="cantidad_ventas"></div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="contador">
+                        <div class="color_fondo" id="fondo_color_compras"></div>
+                        <div class="numero" id="cantidad_compras"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="myChartLine"></canvas>
+                </div>
+                <div class="col-6">
+                    <canvas id="myChartDona"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %} 
+
+{% block js %}
+    <script>
+        const fondo_color_ventas=document.getElementById('fondo_color_ventas')
+        const cantidad_ventas=document.getElementById('cantidad_ventas')
+        
+        let countVentas=0
+        let tiempoVentas=setInterval(() => {
+            countVentas+=1
+            fondo_color_ventas.style.height=`${countVentas}%`
+            cantidad_ventas.textContent=countVentas
+            if(countVentas===100){
+                clearInterval(tiempoVentas)
+            }
+        }, 50);
+    </script>
+    <script>
+        const fondo_color_compras=document.getElementById('fondo_color_compras')
+        const cantidad_compras=document.getElementById('cantidad_compras')
+        
+        let countCompras=0
+        let tiempoCompras=setInterval(() => {
+            countCompras+=1
+            fondo_color_compras.style.height=`${countCompras}%`
+            cantidad_compras.textContent=countCompras
+            if(countCompras===100){
+                clearInterval(tiempoCompras)
+            }
+        }, 50);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let endpointLine = '/api/get_dataLine/'
+        $.ajax({
+            method:"GET",
+            url: endpointLine,
+            success: function(response){
+                console.log(response)
+
+                const config = {
+                type: 'line',
+                data: response,
+                options: {}
+                };
+                const myChart = new Chart(
+                document.getElementById('myChartLine'),
+                config
+                );
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+        })
+        
+      </script>
+    <script>
+        let endpointDona = '/api/get_dataDona/'
+        $.ajax({
+            method:"GET",
+            url: endpointDona,
+            success: function(response){
+                console.log(response)
+                const config = {
+                    type: 'doughnut',
+                    data: response,
+                    options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                        position: 'top',
+                        },
+                        title: {
+                        display: true,
+                        text: 'Chart.js Doughnut Chart'
+                        }
+                    }
+                    },
+                };
+                const myChart = new Chart(
+                document.getElementById('myChartDona'),
+                config
+                );
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+        })
+        
+    </script>
+
+{% endblock%} 
+
+

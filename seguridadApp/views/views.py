@@ -9,6 +9,7 @@ from django.contrib.auth.models import User,Permission,Group
 from django.core.paginator import Paginator
 from django.db.models import Q 
 from ventasApp.forms import PerfilForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def acceder(request):
     if request.method=="POST":
@@ -35,6 +36,7 @@ def acceder(request):
     form=AuthenticationForm()
     return render(request, "login.html", {"form": form})
 
+@login_required(login_url='login')
 def home(request):
     return render(request, "home.html",{'userNameLogged':request.session['userName_logged'],'userLogged':request.session['user_logged']})
 
@@ -43,8 +45,9 @@ def salir(request):
     del request.session['userName_logged']
     logout(request)
     messages.info(request,"Saliste exitosamente")
-    return redirect("login") 
+    return redirect("login")
 
+@login_required(login_url='login')
 def perfil(request):
     user=User.objects.get(username=request.session['user_logged'])
     request.session['userName_logged'] = user.last_name + ' '+ user.first_name
