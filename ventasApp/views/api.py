@@ -72,3 +72,45 @@ def get_dataDona(request,*args,**kwargs):
             }]
         };
     return JsonResponse(data)
+
+
+
+def obtenerDetalle(request,*args,**kwargs):
+    list_detalle = []
+    pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=kwargs['id'])
+    listado = DetallePedidoVenta.objects.all().filter(pedidoVenta=pedidoVenta).filter(eliminado=False).values()
+    for t in listado:  
+        producto=Producto.objects.get(idProducto=t['producto_id'])      
+        list_detalle.append({
+            'detalle_id': t['idDetallePedidoVenta'],
+            'producto_id':producto.idProducto,
+            'codigo':producto.codigo,
+            'descripcion':producto.descripcion,
+            'cantidad':t['cantidad'],
+            'precioUnitario':t['precioUnitario'],
+            'descuentoUnitario':t['descuentoUnitario'],
+            'precio':t['precio'],
+        })
+    cliente = Cliente.objects.get(idCliente=pedidoVenta.cliente_id)
+    data={
+        'idPedidoVenta':pedidoVenta.idPedidoVenta,
+        'tasaIgv':pedidoVenta.tasaIgv,
+        'tipoDocumentoIdentidad' : cliente.tipoDocumentoIdentidad,
+        'subtotal':pedidoVenta.subtotal,
+        'descuento':pedidoVenta.descuento,
+        'total':pedidoVenta.total,
+        'detalle':list_detalle
+    }
+    
+    return JsonResponse(data)
+
+def obtenerCliente(request,*args,**kwargs):
+    cliente = Cliente.objects.get(idCliente=kwargs['id'])
+
+    data={
+        'idCliente':cliente.idCliente,
+        'tipoDocumentoIdentidad':cliente.tipoDocumentoIdentidad,
+        'documentoIdentidad':cliente.documentoIdentidad,
+    }
+    
+    return JsonResponse(data)

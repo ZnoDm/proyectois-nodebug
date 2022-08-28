@@ -1,12 +1,11 @@
 
 from django.urls import path
-from ventasApp.views import pedidoVenta
+from ventasApp.views.pedidoVenta import *
 
 urlpatterns = [
-    path('',pedidoVenta.listarpedidoVenta,name="listarpedidoVenta"),
-    path('create/',pedidoVenta.agregarpedidoVenta,name="agregarpedidoVenta"),
-    path('edit/<int:id>/',pedidoVenta.editarpedidoVenta,name="editarpedidoVenta"),
-    path('delete/<int:id>/',pedidoVenta.eliminarpedidoVenta,name="eliminarpedidoVenta"), 
-    path('active/<int:id>/<int:activo>/',pedidoVenta.activarpedidoVenta,name="activarpedidoVenta"),
-    path('pdf/<int:id>',pedidoVenta.ListPedidoVentaPdf,name='pdfpedidoVenta'),
+    path('',listarpedidoVenta,name="listarpedidoVenta"),
+    path('create/',agregarpedidoVenta,name="agregarpedidoVenta"),
+    path('edit/<int:id>/',editarpedidoVenta,name="editarpedidoVenta"),
+    path('delete/<int:id>/',eliminarpedidoVenta,name="eliminarpedidoVenta"), 
+    path('pdf/<int:id>',ListPedidoVentaPdf,name='pdfpedidoVenta'),
 ]

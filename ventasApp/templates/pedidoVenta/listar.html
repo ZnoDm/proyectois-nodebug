@@ -35,11 +35,10 @@
                         <th>Fecha Emisión</th>
                         <th>Fecha Entrega</th>
                         <th>Moneda</th>
-                        <th>Tasa de Cambio</th>
                         <th>Subtotal</th>
-                        <th>IGV</th>
                         <th>Descuento</th>
-                        <th>Total</th>
+                        <th>Total</th>                        
+                        <th>ESTADO</th>
                         <th><center>Opciones</center></th>
                     </tr>
                 </thead>
@@ -48,18 +47,35 @@
                 <tr>
                     <td>{{ itempedidoventa.idPedidoVenta}}</td>
                     <td>{{ itempedidoventa.codigo }}</td>
-                    <td>{{ itempedidoventa.fechaEmision }}</td>
-                    <td>{{ itempedidoventa.fechaEntrega }}</td>
+                    <td>{{ itempedidoventa.fechaEmision|date:"d/m/Y" }}</td>
+                    <td>{{ itempedidoventa.fechaEntrega|date:"d/m/Y" }}</td>
                     <td>{{ itempedidoventa.tipoMoneda }}</td>
-                    <td>{{ itempedidoventa.tasaCambio }}</td>
                     <td>{{ itempedidoventa.subtotal }}</td>
-                    <td>{{ itempedidoventa.tasaIgv }}</td>
                     <td>{{ itempedidoventa.descuento }}</td>
                     <td>{{ itempedidoventa.total }}</td>
+                    
+                    <td>{% if itempedidoventa.estado == 1 %}
+                        Abierto
+                        {% endif %}
+                        {% if itempedidoventa.estado == 2 %}
+                        Cerrado
+                        {% endif %}
+                        {% if itempedidoventa.estado == 3 %}
+                        Anulado
+                        {% endif %}</td>
                     <td style="text-align: center;">
-                        <a href="{% url 'pdfpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="far fa-file-pdf"></i></a>
-                        <a href="{% url 'editarpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href="#" onclick="eliminarpedidoVenta('{{itempedidoventa.idPedidoVenta}}','{{itempedidoventa.codigo}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        {% if itempedidoventa.estado == 1 %}                        
+                        <a title="Cargar Documento" href="{% url 'pdfpedidoVenta' itempedidoventa.idPedidoVenta %}" target="_blank" class="btn btn-danger btn-sm"><i class="far fa-file-pdf"></i></a>                        
+                        <a title="Editar" href="{% url 'editarpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>                        
+                        <a title="Eliminar" href="#" onclick="eliminarpedidoVenta('{{itempedidoventa.idPedidoVenta}}','{{itempedidoventa.codigo}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                        {% endif %}
+                        {% if itempedidoventa.estado == 2 %}
+                        <a title="Cargar Documento" href="{% url 'pdfpedidoVenta' itempedidoventa.idPedidoVenta %}" target="_blank" class="btn btn-danger btn-sm"><i class="far fa-file-pdf"></i></a>                        
+                        <a title="Editar" href="{% url 'editarpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a> 
+                        {% endif %}
+                        {% if itempedidoventa.estado == 3 %}
+                        <a title="Editar" href="{% url 'editarpedidoVenta' itempedidoventa.idPedidoVenta %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>  
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -133,15 +149,6 @@
                 window.location.replace(window.location.origin+"/pedidoVenta/delete/"+id+"/") }
         });
         }
-
-        function activarpedidoVenta(id,activo){
-            let estado;
-            if(activo=='False')
-                estado=0
-            else
-                estado=1
-                window.location.replace(window.location.origin+"/pedidoVenta/active/"+id+"/"+ estado +"/")
-        };
 </script>
 {% endblock js %} 
 

@@ -7,4 +7,7 @@ urlpatterns = [
     path('get_countVentas/',get_countVentas ,name="get_countVentas"),
     path('get_dataDona/',get_dataDona,name="get_dataDona"), 
     path('get_dataLine/',get_dataLine,name="get_dataLine"), 
+    
+    path('get_detallePedidoVenta/<int:id>/',obtenerDetalle,name="detallepedidoVenta"),
+    path('get_cliente/<int:id>/',obtenerCliente,name="detallepedidoVenta"),
 ]

@@ -2,7 +2,7 @@ from django import forms
 from django.forms import fields 
 from .models import *
 from django.contrib.auth.models import User
-
+import datetime
 class PerfilForm(forms.Form):
 
     last_name = forms.CharField(max_length=150)
@@ -138,7 +138,9 @@ class PedidoVentaForm(forms.ModelForm):
         widgets = {
             'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
-            'codigo': forms.TextInput(attrs={'readonly': True})
+            'codigo': forms.TextInput(attrs={'readonly': True}),
+            'tasaCambio':forms.NumberInput(attrs={'step': '0.01'}),
+            'tasaIgv': forms.NumberInput(attrs={'step': '0.01'})
         }
 
 
@@ -181,4 +183,5 @@ class NotaAlmacenForm(forms.ModelForm):
         widgets = {
             'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
+            
         }

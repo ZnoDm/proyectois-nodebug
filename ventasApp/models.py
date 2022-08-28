@@ -193,7 +193,6 @@ ANULADA = 4
 ESTADO  = (
     (ABIERTA ,'Abierta'),
     (CERRADA ,'Cerrada'),
-    (LIBERADA ,'Liberada'),
     (ANULADA ,'Anulada'),
 )
 #========= FIN ESTADO  =============

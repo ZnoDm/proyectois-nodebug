@@ -7,9 +7,8 @@ from ventasApp.forms import PedidoVentaForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.views.generic import ListView, View
-
+from django.http import JsonResponse
 from ventasApp.utils import render_to_pdf
-
 # Create your views here.
 def agregarpedidoVenta(request):
     list_product = Producto.objects.all().filter(eliminado=False).values()
@@ -79,58 +78,138 @@ def agregarpedidoVenta(request):
     
     else:
         cantidad = PedidoVenta.objects.count()
-        form=PedidoVentaForm(initial={'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('PV-') + str(cantidad+1)})
+        form=PedidoVentaForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('PV-') + str(cantidad+1)})
+        form.fields["cliente"].choices = [(r['idCliente'],str(r['apellidos']) +str(r['nombres'])) for r in Cliente.objects.exclude(eliminado=1).values()]
         context={'form':form,'list_product':list_product} 
         return render(request,"pedidoVenta/agregar.html",context) 
 
 def listarpedidoVenta(request):
     queryset = request.GET.get("buscar")
-    pedidoVenta = PedidoVenta.objects.all().filter(eliminado=False).order_by('-idPedidoVenta').values()
+    pedidoVenta = PedidoVenta.objects.all().order_by('-idPedidoVenta').values()
     if queryset:
-        pedidoVenta=PedidoVenta.objects.filter(Q(codigo__icontains=queryset)).filter(eliminado=False).distinct().order_by('-idPedidoVenta').values() 
+        pedidoVenta=PedidoVenta.objects.filter(Q(codigo__icontains=queryset)).distinct().order_by('-idPedidoVenta').values() 
     paginator = Paginator(pedidoVenta, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    context={'pedidoVenta':pedidoVenta}
     return render(request,"pedidoVenta/listar.html",{'page_obj': page_obj})
 
 def editarpedidoVenta(request,id):
+    list_product = Producto.objects.all().filter(eliminado=False).values()
     pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=id)
     if request.method=="POST":
-        form=PedidoVentaForm(request.POST,instance=pedidoVenta)
-        if form.is_valid():
-            messages.success(request, "Pedido actualizado.")
-            form.save() 
-            return redirect("listarpedidoVenta") 
+        form=PedidoVentaForm(request.POST)
+
+        arregloObjetoProductos = []  
+        pedidoVenta_subtotal = 0.0
+        pedidoVenta_descuento = 0.0
+        pedidoVenta_total = 0.0
+
+        arregloProductosEliminados = [] 
+        idDetalleEliminado = request.POST.getlist('idDetalleEliminado[]')
+        idDetalle = request.POST.getlist('idDetalle[]')
+        idProducto = request.POST.getlist('idProducto[]')
+        idCantidad = request.POST.getlist('idCantidad[]')
+        idPrecioUnitario = request.POST.getlist('idPrecioUnitario[]')
+        idDescuentoUnitario = request.POST.getlist('idDescuentoUnitario[]')
+        idPrecioProductoTotal = request.POST.getlist('idPrecioProductoTotal[]')
+        j=0
+        while(j<len(idDetalleEliminado)):
+            arregloProductosEliminados.append({
+                'Detalle':idDetalleEliminado[j]
+            })
+            j+=1
+
+        i=0
+        while i<len(idProducto):
+            pedidoVenta_subtotal = pedidoVenta_subtotal+(float(idCantidad[i])*float(idPrecioUnitario[i]))
+            pedidoVenta_descuento = pedidoVenta_descuento+float(idDescuentoUnitario[i])
+            pedidoVenta_total = pedidoVenta_total+float(idPrecioProductoTotal[i])
+
+            arregloObjetoProductos.append({
+                'Detalle':idDetalle[i],
+                'Producto':idProducto[i],
+                'Cantidad':idCantidad[i],
+                'PrecioUnitario':idPrecioUnitario[i],
+                'DescuentoUnitario':idDescuentoUnitario[i],
+                'PrecioProductoTotal':idPrecioProductoTotal[i],
+            })
+            i+=1
+
+        for z in arregloProductosEliminados:
+            detalle = DetallePedidoVenta.objects.get(idDetallePedidoVenta=z['Detalle'])
+            detalle.usuarioEliminacion = request.session['user_logged']
+            detalle.fechaEliminacion = datetime.datetime.now()
+            detalle.eliminado = True
+            detalle.save()
+
+        for p in arregloObjetoProductos:
+            if p['Detalle'] == 0:
+                detalle = DetallePedidoVenta(
+                    pedidoVenta = pedidoVenta,
+                    producto= Producto.objects.get(idProducto=p['Producto']), 
+                    cantidad=p['Cantidad'],
+                    precioUnitario=p['PrecioUnitario'],
+                    descuentoUnitario=p['DescuentoUnitario'],
+                    precio=p['PrecioProductoTotal'],
+                    usuarioRegistro = request.session['user_logged']
+                )
+                detalle.save()
+            else:
+                detalle = DetallePedidoVenta.objects.get(idDetallePedidoVenta=p['Detalle'])
+                detalle.cantidad=p['Cantidad']
+                detalle.precioUnitario=p['PrecioUnitario']
+                detalle.descuentoUnitario=p['DescuentoUnitario']
+                detalle.precio=p['PrecioProductoTotal']
+                detalle.usuarioModificacion = request.session['user_logged']
+                detalle.fechaModificacion = datetime.datetime.now()
+                detalle.save()
+        
+        pedidoVenta.trabajador = Trabajador.objects.get(idTrabajador=form['trabajador'].value())
+        pedidoVenta.cliente = Cliente.objects.get(idCliente=form['cliente'].value())
+        pedidoVenta.formaPago = FormaPago.objects.get(idFormaPago=form['formaPago'].value())
+        pedidoVenta.fechaEmision = form['fechaEmision'].value()
+        pedidoVenta.fechaEntrega =  form['fechaEntrega'].value()
+        pedidoVenta.tipoMoneda = form['tipoMoneda'].value()
+        pedidoVenta.tasaCambio = form['tasaCambio'].value()
+        pedidoVenta.tasaIgv = form['tasaIgv'].value()
+        pedidoVenta.estado = form['estado'].value()
+
+        pedidoVenta.subtotal = pedidoVenta_subtotal
+        pedidoVenta.descuento = pedidoVenta_descuento
+        pedidoVenta.total = pedidoVenta_total
+        
+        pedidoVenta.usuarioModificacion = request.session['user_logged']
+        pedidoVenta.fechaModificacion = datetime.datetime.now()
+        pedidoVenta.save()
+        messages.success(request, "Pedido de Venta actualizada.")
+        
+        return redirect("listarpedidoVenta")  
     else:
         form=PedidoVentaForm(instance=pedidoVenta)
-        context={"form":form} 
+        form.fields["cliente"].choices = [(r['idCliente'],str(r['apellidos']) +' '+str(r['nombres'])) for r in Cliente.objects.exclude(eliminado=1).values()]
+        context={"form":form,'list_product':list_product,'pedidoVenta':pedidoVenta,'id':id} 
         return render(request,"pedidoVenta/edit.html",context)
 
 def eliminarpedidoVenta(request,id):
     pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=id) 
-    pedidoVenta.activo=False
     pedidoVenta.eliminado=True
+    pedidoVenta.estado=3
     pedidoVenta.usuarioEliminacion = request.session['user_logged']
     pedidoVenta.fechaEliminacion = datetime.datetime.now()
     pedidoVenta.save()
     messages.success(request, "Pedido de venta eliminado.")
     return redirect("listarpedidoVenta")
 
-def activarpedidoVenta(request,id,activo):
-    pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=id)
-    if activo == 0:
-        pedidoVenta.activo=True
-    else:
-        pedidoVenta.activo=False
-    pedidoVenta.save()
-    messages.success(request, "Pedido de venta actualizado.")
-    return redirect("listarpedidoVenta") 
-    
+
 def ListPedidoVentaPdf(View, id):
-        pedidoVenta = PedidoVenta.objects.get(idPedidoVenta=id)
-        data = {
-            'pedidoVenta': pedidoVenta
-        }
-        pdf = render_to_pdf('pedidoVenta/listview.html', data)
-        return HttpResponse(pdf, content_type='application/pdf')
+    pedidoVenta = PedidoVenta.objects.get(idPedidoVenta=id)
+    cliente = Cliente.objects.get(idCliente=pedidoVenta.cliente_id)
+    detalle = DetallePedidoVenta.objects.all().filter(pedidoVenta=id).filter(eliminado=False).values()
+    data = {
+        'cliente':cliente,
+        'tipoDocumentoIdentidad': cliente.tipoDocumentoIdentidad,
+        'pedidoVenta': pedidoVenta,
+        'detalle': detalle
+    }
+    pdf = render_to_pdf('pedidoVenta/listview.html', data)
+    return HttpResponse(pdf, content_type='application/pdf')
