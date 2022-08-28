@@ -60,6 +60,12 @@
                   
                 <div class="col-12 col-lg-3">
                     {{ form.tasaIgv|as_crispy_field }}
+                </div>   
+                <div class="col-12 col-lg-6">
+                    
+                </div>
+                <div class="col-12 col-lg-3">
+                    {{ form.tipoDocumento|as_crispy_field }}
                 </div>    
                    
             </div>
@@ -138,7 +144,7 @@
                 <option value="-1" selected disabled>Selecciona un Producto</option>
                 {% if list_product %}
                     {% for itemproducto in list_product %}
-                        <option value="{{itemproducto.idProducto}}_{{itemproducto.descripcion}}_{{itemproducto.precioUnitario}}_{{itemproducto.stock}}_{{itemproducto.codigo}}">{{itemproducto.descripcion}}</option>
+                        <option value="{{itemproducto.idProducto}}_{{itemproducto.nombre}}_{{itemproducto.precioUnitario}}_{{itemproducto.stock}}_{{itemproducto.codigo}}">{{itemproducto.nombre}}</option>
                     {% endfor %}
                 {% else %}
                 {% endif %}

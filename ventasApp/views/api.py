@@ -84,6 +84,7 @@ def obtenerDetalle(request,*args,**kwargs):
         list_detalle.append({
             'detalle_id': t['idDetallePedidoVenta'],
             'producto_id':producto.idProducto,
+            'stock':producto.stock,
             'codigo':producto.codigo,
             'descripcion':producto.descripcion,
             'cantidad':t['cantidad'],
@@ -92,10 +93,12 @@ def obtenerDetalle(request,*args,**kwargs):
             'precio':t['precio'],
         })
     cliente = Cliente.objects.get(idCliente=pedidoVenta.cliente_id)
+    documento = DocumentoVenta.objects.get(pedidoVenta=pedidoVenta)
     data={
         'idPedidoVenta':pedidoVenta.idPedidoVenta,
         'tasaIgv':pedidoVenta.tasaIgv,
-        'tipoDocumentoIdentidad' : cliente.tipoDocumentoIdentidad,
+        'serie' : documento.serie,
+        'numero' : documento.numero,
         'subtotal':pedidoVenta.subtotal,
         'descuento':pedidoVenta.descuento,
         'total':pedidoVenta.total,

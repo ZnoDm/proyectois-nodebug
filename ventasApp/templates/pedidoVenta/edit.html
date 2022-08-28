@@ -50,10 +50,14 @@
                       
                     <div class="col-12 col-lg-3">
                         {{ form.tasaIgv|as_crispy_field }}
+                    </div> 
+                    <div class="col-12 col-lg-6">
+                    
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        {{ form.tipoDocumento|as_crispy_field }}
                     </div>  
-                    <div class="col-12 col-lg-9 d-flex justify-content-end align-items-center">
-                        DOCUMENTO A IMPRIMIR: <span id="documentoAImprimir" style="font-weight: bold;margin-left: 10px;"> </span>
-                    </div>     
+                        
                        
                 </div>
                 <hr class="my-2" style="background-color: #c4c4c4;">
@@ -357,11 +361,6 @@
             url: endpointCompras,
             success: function(response){
                 let data = response; 
-                if(response.tipoDocumentoIdentidad == 'DNI'){
-                    document.getElementById('documentoAImprimir').innerHTML= 'BOLETA'
-                }else{
-                    document.getElementById('documentoAImprimir').innerHTML= 'FACTURA'
-                }
                 console.log(response);
                 document.getElementById('sub-total').innerHTML=parseFloat(data.subtotal).toFixed(2);
                 document.getElementById('descuento').innerHTML=parseFloat(data.descuento).toFixed(2);
@@ -426,11 +425,6 @@
             success: (response)=>{
                 let data = response; 
                 console.log(response);
-                if(response.tipoDocumentoIdentidad == 'DNI'){
-                    document.getElementById('documentoAImprimir').innerHTML= 'BOLETA'
-                }else{
-                    document.getElementById('documentoAImprimir').innerHTML= 'FACTURA'
-                }
             },
             error: (error_data)=>{
                 console.log("error")

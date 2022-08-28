@@ -197,6 +197,14 @@ ESTADO  = (
 )
 #========= FIN ESTADO  =============
 
+#========= VISTA TIPODOCUMENTO =========
+BOLETA = 'BOLETA'
+FACTURA = 'FACTURA'
+TIPODOCUMENTO  = (
+    (BOLETA ,'Boleta'),
+    (FACTURA ,'Factura'),
+)
+#========= FIN TIPODOCUMENTO  =============
 class PedidoVenta(models.Model):
     idPedidoVenta = models.AutoField(primary_key=True)
 
@@ -207,7 +215,7 @@ class PedidoVenta(models.Model):
 
     fechaEmision = models.DateField()
     fechaEntrega = models.DateField()
-
+    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=BOLETA)
     tipoMoneda= models.CharField(max_length=50,choices=TIPOMONEDA, default=SOLES)
     tasaCambio = models.FloatField()
 
@@ -288,7 +296,7 @@ class OrdenCompra(models.Model):
 
     fechaEmision = models.DateField()
     fechaEntrega = models.DateField()
-
+    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=BOLETA)
     tipoMoneda= models.CharField(max_length=50,choices=TIPOMONEDA, default=SOLES)
     tasaCambio = models.FloatField()
 
@@ -396,25 +404,11 @@ class DetalleNotaAlmacen(models.Model):
         return self
 
 
-#========= VISTA TIPODOCUMENTO =========
-BOLETA = 'BOLETA'
-FACTURA = 'FACTURA'
-TIPODOCUMENTO  = (
-    (BOLETA ,'Boleta'),
-    (FACTURA ,'Factura'),
-)
-#========= FIN TIPODOCUMENTO  =============
 
 class DocumentoVenta(models.Model):
     idDocumentoVenta = models.AutoField(primary_key=True)    
-    trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
-    cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE)
     pedidoVenta = models.ForeignKey(PedidoVenta, on_delete = models.CASCADE)
     codigo = models.CharField(max_length=10)
-
-    fechaEmision = models.DateField()
-    fechaEntrega = models.DateField()
-
     serie = models.CharField(max_length=20) 
     numero = models.CharField(max_length=20)
 
@@ -431,63 +425,13 @@ class DocumentoVenta(models.Model):
     def __str__(self):
         return self
 
-class DetalleDocumentoVenta(models.Model):
-    idDetalleDocumentoVenta = models.AutoField(primary_key=True)    
-    documentoVenta = models.ForeignKey(DocumentoVenta, on_delete = models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
-
-    cantidad = models.IntegerField()
-    precioUnitario = models.FloatField()
-    descuentoUnitario = models.FloatField()
-    precio = models.FloatField()
-
-    eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300,default='admin')
-    fechaRegistro = models.DateField(default= datetime.datetime.now())
-    usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
-    fechaModificacion = models.DateField(blank=True, null=True)
-    usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
-    fechaEliminacion = models.DateField(blank=True, null=True)
-
-    def __str__(self):
-        return self
-
-
 class DocumentoCompra(models.Model):
     idDocumentoCompra = models.AutoField(primary_key=True)      
     ordenCompra = models.ForeignKey(OrdenCompra, on_delete = models.CASCADE)
-
-    trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
-    proveedor = models.ForeignKey(Proveedor, on_delete = models.CASCADE)
-
-    fechaEmision = models.DateField()
-    fechaEntrega = models.DateField()
-
     serie = models.CharField(max_length=20) 
     numero = models.CharField(max_length=20)
     
     tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=FACTURA)
-
-    eliminado = models.BooleanField(default= False)
-    usuarioRegistro = models.CharField(max_length=300,default='admin')
-    fechaRegistro = models.DateField(default= datetime.datetime.now())
-    usuarioModificacion = models.CharField(max_length=300,blank=True, null=True)
-    fechaModificacion = models.DateField(blank=True, null=True)
-    usuarioEliminacion = models.CharField(max_length=300,blank=True, null=True)
-    fechaEliminacion = models.DateField(blank=True, null=True)
-
-    def __str__(self):
-        return self
-
-class DetalleDocumentoCompra(models.Model):
-    idDetalleDocumentoCompra = models.AutoField(primary_key=True)    
-    documentoCompra = models.ForeignKey(DocumentoCompra, on_delete = models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete = models.CASCADE)
-
-    cantidad = models.IntegerField()
-    precioUnitario = models.FloatField()
-    descuentoUnitario = models.FloatField()
-    precio = models.FloatField()
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')

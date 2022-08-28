@@ -67,28 +67,9 @@
                             <th scope="col">Precio Unitario</th>                            
                             <th scope="col">Cantidad</th>
                             <th scope="col">Precio</th>
-                            <th scope="col">Descuento Unitario</th>
-                            <th scope="col">Precio Sin IGV</th>
-                            <th scope="col">Precio IGV (<span id="spanIGV">{{form.tasaIgv.value}}</span>)</th>
+                            <th scope="col">Stock</th>
                           </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                              <td colspan="6"></td>
-                              <td><strong>Sub Total:</strong></td>
-                              <td><span id="sub-total">0.00</span></td>
-                            </tr>
-                            <tr>
-                                <td colspan="6"></td>
-                                <td ><strong>Descuento:</strong></td>
-                                <td><span id="descuento">0.00</span></td>
-                            </tr>
-                            <tr>
-                                <td colspan="6"></td>
-                                <td><strong>Total:</strong></td>
-                                <td><span id="totales">0.00</span></td>
-                            </tr>
-                        </tfoot>
                         <tbody id="tableProductos">
                         </tbody>
                       </table>
@@ -119,81 +100,57 @@
         {% endfor %}
     {% endif %}
     <script>
-        
         const selectElement3 = document.getElementById('id_pedidoVenta');
         selectElement3.addEventListener('change', (event) => {
-            onChangeDetalle(event.target.value)
+            onChangeDetalleVenta(event.target.value)
         });
-
-
     </script>
     <script>  
-        const onChangeDetalle  = (id)=>{
+        const onChangeDetalleVenta  = (id)=>{
+            document.getElementById('id_tipoOperacion').value = "SALIDA";
             let endpointCompras = '/api/get_detallePedidoVenta/'+id+'/'
-        $.ajax({
-            method:"GET",
-            url: endpointCompras,
-            success: function(response){
-                let data = response; 
-                
-                let indice = 0;
-                let totales = 0;
-                let subtotal = 0;
-                let descuento = 0;
-                let arrayIdProctuctos=[];
-                let arrayDetalleEliminado=[];
-                console.log(response);
-                document.getElementById('sub-total').innerHTML=parseFloat(data.subtotal).toFixed(2);
-                document.getElementById('descuento').innerHTML=parseFloat(data.descuento).toFixed(2);
-                document.getElementById('totales').innerHTML=parseFloat(data.total).toFixed(2); 
-                document.getElementById('tableProductos').innerHTML = '';
-                for (let index = 0; index < data.detalle.length; index++) {
-                    const element = data.detalle[index];
-                    arrayIdProctuctos[indice] = data.detalle[index].producto_id;
-                
-                    fila = '<tr id="filaP'+(indice)+'">'
+            $.ajax({
+                method:"GET",
+                url: endpointCompras,
+                success: function(response){
+                    let data = response; 
+                    document.getElementById('id_serie').value = data.serie;
+                    document.getElementById('id_numero').value = data.numero;
+                    let indice = 0;
+                    let arrayIdProctuctos=[];
+                    console.log(response);
+                    for (let index = 0; index < data.detalle.length; index++) {
+                        const element = data.detalle[index];
+                        arrayIdProctuctos[indice] = data.detalle[index].producto_id;
                     
-                    fila +=     '<td><input class="form-control" type="hidden" name="idProducto[]" value="'+data.detalle[index].producto_id+'">'+data.detalle[index].codigo+'</td>'
-                    
-                    fila +=     '<td><input class="form-control" id="filaDetalleP'+(indice)+'" type="hidden" name="idDetalle[]" value="'+data.detalle[index].detalle_id+'">'+data.detalle[index].descripcion+'</td>'
-
-                    fila +=     '<td><input id="filaPrecioUnitario'+(indice)+'" class="form-control" type="hidden" name="idPrecioUnitario[]" value="'+data.detalle[index].precioUnitario+'">'+data.detalle[index].precioUnitario+'</td>'
-                    fila +=     '<td><input id="filaCantidad'+(indice)+'" min="1" class="form-control" style="width:70px;" type="number" step="1" name="idCantidad[]" value="'+data.detalle[index].cantidad+'" onchange="actualizarMontos()"></td>'
-                    fila +=     '<td><input id="filaPrecio'+(indice)+'" class="form-control" type="number" readonly name="idPrecio[]" value=""  onchange="actualizarMontos()"></td>'    
-
-                    fila +=     '<td><input id="filaDescuentoUnitario'+(indice)+'" min="0" class="form-control" onchange="actualizarMontos()" type="number" step="0.1"  name="idDescuentoUnitario[]" value="0"></td>'
-                    
-                    fila +=     '<td><input class="form-control" readonly type="text" id="filaPrecioSinIGV'+(indice)+'" name="idPrecioSinIGV[]" value=""</td>'
-
-                    fila +=     '<td><input class="form-control" readonly type="text" id="filaPrecioProductoTotal'+(indice)+'" name="idPrecioProductoTotal[]" value=""</td>'
-                    fila +='</tr>';                    
-                    document.getElementById('tableProductos').innerHTML += fila;
-                    
-                    let igv = response.tasaIgv;
-                    for (let index = 0; index < arrayIdProctuctos.length; index++) {
-                        let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
-                        let cantidad = document.getElementById('filaCantidad'+index).value;
-                        let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
-                        document.getElementById('filaPrecio'+index).value = precio;
+                        fila = '<tr id="filaP'+(indice)+'">'
                         
-                        let descuento_unitario = document.getElementById('filaDescuentoUnitario'+index).value;
-                        let precioSinIgv = parseFloat(precio).toFixed(2)-parseFloat(descuento_unitario).toFixed(2)
-                        document.getElementById('filaPrecioSinIGV'+index).value = precioSinIgv;
-                    
-                        let precio_total =parseFloat(precioSinIgv*1.0 + precioSinIgv*1.0*parseFloat(igv).toFixed(2)).toFixed(2); 
-                        document.getElementById('filaPrecioProductoTotal'+index).value = precio_total
+                        fila +=     '<td><input class="form-control" type="hidden" name="idProducto[]" value="'+data.detalle[index].producto_id+'">'+data.detalle[index].codigo+'</td>'
                         
-                        
-                    }
+                        fila +=     '<td><input class="form-control" id="filaDetalleP'+(indice)+'" type="hidden" name="idDetalle[]" value="'+data.detalle[index].detalle_id+'">'+data.detalle[index].descripcion+'</td>'
 
+                        fila +=     '<td><input id="filaPrecioUnitario'+(indice)+'" class="form-control" type="hidden" name="idPrecioUnitario[]" value="'+data.detalle[index].precioUnitario+'">'+data.detalle[index].precioUnitario+'</td>'
+                        fila +=     '<td><input id="filaCantidad'+(indice)+'" readonly min="1" class="form-control" style="width:70px;" type="number" step="1" name="idCantidad[]" value="'+data.detalle[index].cantidad+'" readonly"></td>'
+                        fila +=     '<td><input id="filaPrecio'+(indice)+'" class="form-control" type="number" readonly name="idPrecio[]" value=""  readonly></td>'    
+
+                        fila +=     '<td><input id="filaDescuentoUnitario'+(indice)+'" min="0" class="form-control" readonly type="number"  name="idDescuentoUnitario[]" value="'+data.detalle[index].stock+'"></td>'
+                        ;                    
+                        document.getElementById('tableProductos').innerHTML += fila;
+                        for (let index = 0; index < arrayIdProctuctos.length; index++) {
+                            let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
+                            let cantidad = document.getElementById('filaCantidad'+index).value;
+                            let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
+                            document.getElementById('filaPrecio'+index).value = precio;
+                            
+                        }
                         indice++;
-                }           
-            },
-            error: function(error_data){
-                console.log("error")
-                console.log(error_data)
-            }
-        })
+                    }           
+                },
+                error: function(error_data){
+                    console.log("error")
+                    console.log(error_data)
+                }
+            })
         }    
         
     </script>

@@ -9,72 +9,60 @@ from django.core.paginator import Paginator
 def agregarnotaAlmacen(request):
     if request.method=="POST":
         form=NotaAlmacenForm(request.POST)
-        if form.is_valid():
-            codigo_notaAlmacen = form.cleaned_data.get("codigo")
-            notaAlmacen_exits = (NotaAlmacen.objects.filter(codigo=codigo_notaAlmacen).count()>0)
-            if notaAlmacen_exits:
-                messages.info(request, "Nota de Almacén ya existente.")
-                form=NotaAlmacenForm()
-                context={'form':form}
-                return render(request,"notaAlmacen/agregar.html",context) 
-            else:
+        messages.success(request, "Nota de Almacén registrada.")
+        form.save() 
+        element = NotaAlmacen.objects.all().last()
+
+        if (form['pedidoVenta'].value() != None) and form['pedidoVenta'].value() != '':            
+            pedidoVenta_exits = PedidoVenta.objects.get(idPedidoVenta=form['pedidoVenta'].value())
+            detallePedidoVenta = DetallePedidoVenta.objects.all().filter(pedidoVenta=pedidoVenta_exits).values()
+            for p in detallePedidoVenta:                
+                Vproducto = Producto.objects.get(idProducto=int(p['producto_id']))
+                detalle = DetalleNotaAlmacen(
+                    notaAlmacen= element,
+                    producto= Vproducto,
+                    cantidad=p['cantidad'],
+                    precioUnitario=p['precioUnitario'],
+                    descuentoUnitario=p['descuentoUnitario'],
+                    precio=p['precio'],
+                    usuarioRegistro = request.session['user_logged'],
+                    cantidadTotal = int(Vproducto.stock),
+                    cantidadUsada = int(p['cantidad']),
+                    cantidadSaldo = int(Vproducto.stock) -int(p['cantidad']),
+                )
+                Vproducto.stock = int(Vproducto.stock) -int(p['cantidad'])
+                Vproducto.save()
+                detalle.save()
                 
-                messages.success(request, "Nota de Almacén registrada.")
-                form.save() 
-                element = NotaAlmacen.objects.all().last()
+        if (form['ordenCompra'].value() != None) and form['ordenCompra'].value() != '':
+            
+            ordenCompra_exits = OrdenCompra.objects.get(idOrdenCompra=form['ordenCompra'].value())
+            detalleOrdenCompra = DetalleOrdenCompra.objects.all().filter(ordenCompra=ordenCompra_exits).values()
 
-                if (form['pedidoVenta'].value() != None) and form['pedidoVenta'].value() != '':
-                    
-                    pedidoVenta_exits = PedidoVenta.objects.get(idPedidoVenta=form['pedidoVenta'].value())
-                    detallePedidoVenta = DetallePedidoVenta.objects.all().filter(pedidoVenta=pedidoVenta_exits).values()
-
-                    for p in detallePedidoVenta:
-                        
-                        Vproducto = Producto.objects.get(idProducto=int(p['producto_id']))
-                        detalle = DetalleNotaAlmacen(
-                            notaAlmacen= element,
-                            producto= Vproducto,
-                            cantidad=p['cantidad'],
-                            precioUnitario=p['precioUnitario'],
-                            descuentoUnitario=p['descuentoUnitario'],
-                            precio=p['precio'],
-                            usuarioRegistro = request.session['user_logged'],
-                            cantidadTotal = int(Vproducto.stock),
-                            cantidadUsada = int(p['cantidad']),
-                            cantidadSaldo = int(Vproducto.stock) -int(p['cantidad']),
-                        )
-                        Vproducto.stock = int(Vproducto.stock) -int(p['cantidad'])
-                        Vproducto.save()
-                        detalle.save()
-                        
-                if (form['ordenCompra'].value() != None) and form['ordenCompra'].value() != '':
-                    
-                    ordenCompra_exits = OrdenCompra.objects.get(idOrdenCompra=form['ordenCompra'].value())
-                    detalleOrdenCompra = DetalleOrdenCompra.objects.all().filter(ordenCompra=ordenCompra_exits).values()
-
-                    for p in detalleOrdenCompra:
-                        
-                        Vproducto = Producto.objects.get(idProducto=int(p['producto_id']))
-                        detalle = DetalleNotaAlmacen(
-                            notaAlmacen= element,
-                            producto= Vproducto,
-                            cantidad=p['cantidad'],
-                            precioUnitario=p['precioUnitario'],
-                            descuentoUnitario=p['descuentoUnitario'],
-                            precio=p['precio'],
-                            usuarioRegistro = request.session['user_logged'],
-                            cantidadTotal = int(Vproducto.stock),
-                            cantidadUsada = int(p['cantidad']),
-                            cantidadSaldo = int(Vproducto.stock) + int(p['cantidad']),
-                        )
-                        Vproducto.stock = int(Vproducto.stock) + int(p['cantidad'])
-                        Vproducto.save()
-                        detalle.save()
+            for p in detalleOrdenCompra:
                 
-                return redirect("listarnotaAlmacen")
+                Vproducto = Producto.objects.get(idProducto=int(p['producto_id']))
+                detalle = DetalleNotaAlmacen(
+                    notaAlmacen= element,
+                    producto= Vproducto,
+                    cantidad=p['cantidad'],
+                    precioUnitario=p['precioUnitario'],
+                    descuentoUnitario=p['descuentoUnitario'],
+                    precio=p['precio'],
+                    usuarioRegistro = request.session['user_logged'],
+                    cantidadTotal = int(Vproducto.stock),
+                    cantidadUsada = int(p['cantidad']),
+                    cantidadSaldo = int(Vproducto.stock) + int(p['cantidad']),
+                )
+                Vproducto.stock = int(Vproducto.stock) + int(p['cantidad'])
+                Vproducto.save()
+                detalle.save()
+        
+        return redirect("listarnotaAlmacen")
     
     else:
-        form=NotaAlmacenForm()
+        cantidad = PedidoVenta.objects.count()
+        form=NotaAlmacenForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'codigo': str('NT-') + str(cantidad+1)})
         context={'form':form} 
         return render(request,"notaAlmacen/agregar.html",context) 
 
@@ -99,7 +87,8 @@ def editarnotaAlmacen(request,id):
             return redirect("listarnotaAlmacen") 
     else:
         form=NotaAlmacenForm(instance=notaAlmacen)
-        context={"form":form} 
+        pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=notaAlmacen.pedidoVenta_id) 
+        context={"form":form,'id':pedidoVenta.idPedidoVenta} 
         return render(request,"notaAlmacen/edit.html",context)
 
 def eliminarnotaAlmacen(request,id):

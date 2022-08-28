@@ -56,12 +56,21 @@ def agregarpedidoVenta(request):
                         subtotal = pedidoVenta_subtotal,
                         descuento = pedidoVenta_descuento,
                         total = pedidoVenta_total,
-
+                        tipoDocumento = form['tipoDocumento'].value(),
                         usuarioRegistro = request.session['user_logged']
                     )
         pedidoVenta.save()
         element = PedidoVenta.objects.all().last()
-
+        cantidadD = PedidoVenta.objects.count()
+        documentoPedidoVenta = DocumentoVenta.objects.create(
+                        pedidoVenta = element,
+                        codigo = str('DOC-') + str(cantidadD+1),
+                        serie = '00',
+                        numero = str(cantidadD+1),
+                        tipoDocumento = form['tipoDocumento'].value(),
+                        usuarioRegistro = request.session['user_logged']
+                    )
+        documentoPedidoVenta.save()
         for p in arregloObjetoProductos:
             detalle = DetallePedidoVenta(
                 pedidoVenta = element,
@@ -79,7 +88,7 @@ def agregarpedidoVenta(request):
     else:
         cantidad = PedidoVenta.objects.count()
         form=PedidoVentaForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('PV-') + str(cantidad+1)})
-        form.fields["cliente"].choices = [(r['idCliente'],str(r['apellidos']) +str(r['nombres'])) for r in Cliente.objects.exclude(eliminado=1).values()]
+        form.fields["cliente"].choices = [(r['idCliente'],str(r['apellidos']) +' '+ str(r['nombres'])) for r in Cliente.objects.exclude(eliminado=1).values()]
         context={'form':form,'list_product':list_product} 
         return render(request,"pedidoVenta/agregar.html",context) 
 
@@ -173,7 +182,7 @@ def editarpedidoVenta(request,id):
         pedidoVenta.tasaCambio = form['tasaCambio'].value()
         pedidoVenta.tasaIgv = form['tasaIgv'].value()
         pedidoVenta.estado = form['estado'].value()
-
+        pedidoVenta.tipoDocumento = form['tipoDocumento'].value()
         pedidoVenta.subtotal = pedidoVenta_subtotal
         pedidoVenta.descuento = pedidoVenta_descuento
         pedidoVenta.total = pedidoVenta_total
@@ -181,6 +190,9 @@ def editarpedidoVenta(request,id):
         pedidoVenta.usuarioModificacion = request.session['user_logged']
         pedidoVenta.fechaModificacion = datetime.datetime.now()
         pedidoVenta.save()
+        documento = DocumentoVenta.objects.get(pedidoVenta=pedidoVenta)
+        documento.tipoDocumento = form['tipoDocumento'].value()
+        documento.save()
         messages.success(request, "Pedido de Venta actualizada.")
         
         return redirect("listarpedidoVenta")  
@@ -205,10 +217,11 @@ def ListPedidoVentaPdf(View, id):
     pedidoVenta = PedidoVenta.objects.get(idPedidoVenta=id)
     cliente = Cliente.objects.get(idCliente=pedidoVenta.cliente_id)
     detalle = DetallePedidoVenta.objects.all().filter(pedidoVenta=id).filter(eliminado=False).values()
+    documento = DocumentoVenta.objects.get(pedidoVenta=id)
     data = {
         'cliente':cliente,
-        'tipoDocumentoIdentidad': cliente.tipoDocumentoIdentidad,
         'pedidoVenta': pedidoVenta,
+        'documento':documento,
         'detalle': detalle
     }
     pdf = render_to_pdf('pedidoVenta/listview.html', data)

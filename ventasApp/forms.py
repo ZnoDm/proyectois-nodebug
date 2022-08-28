@@ -128,6 +128,7 @@ class PedidoVentaForm(forms.ModelForm):
             'cliente',
             'formaPago',
             'codigo',
+            'tipoDocumento',
             'fechaEmision',
             'fechaEntrega',
             'tipoMoneda',
@@ -152,6 +153,7 @@ class OrdenCompraForm(forms.ModelForm):
             'proveedor',
             'formaPago',
             'codigo',
+            'tipoDocumento',
             'fechaEmision',
             'fechaEntrega',
             'tipoMoneda',
@@ -160,6 +162,7 @@ class OrdenCompraForm(forms.ModelForm):
             'estado',
         ]
         widgets = {
+            'codigo': forms.TextInput(attrs={'readonly': True}),
             'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
         }
@@ -181,6 +184,9 @@ class NotaAlmacenForm(forms.ModelForm):
             'estado',
         ]
         widgets = {
+            'serie': forms.TextInput(attrs={'readonly': True}),
+            'numero': forms.TextInput(attrs={'readonly': True}),
+            'codigo': forms.TextInput(attrs={'readonly': True}),
             'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
             

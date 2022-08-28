@@ -39,6 +39,7 @@
                         <th>Tipo de Operación</th>
                         <th>Serie</th>
                         <th>Número</th>
+                        <th>Estado</th>
                         <th><center>Opciones</center></th>
                     </tr>
                 </thead>
@@ -49,11 +50,20 @@
                     <td>{{ itemnotaalmacen.pedidoVenta_id }}</td>
                     <td>{{ itemnotaalmacen.ordenCompra_id }}</td>
                     <td>{{ itemnotaalmacen.codigo }}</td>
-                    <td>{{ itemnotaalmacen.fechaEmision }}</td>
-                    <td>{{ itemnotaalmacen.fechaEntrega }}</td>
+                    <td>{{ itemnotaalmacen.fechaEmision|date:"d/m/Y" }}</td>
+                    <td>{{ itemnotaalmacen.fechaEntrega|date:"d/m/Y"}}</td>
                     <td>{{ itemnotaalmacen.tipoOperacion }}</td>
                     <td>{{ itemnotaalmacen.serie }}</td>
                     <td>{{ itemnotaalmacen.numero }}</td>
+                    <td>{% if itemnotaalmacen.estado == 1 %}
+                        Abierto
+                        {% endif %}
+                        {% if itemnotaalmacen.estado == 2 %}
+                        Cerrado
+                        {% endif %}
+                        {% if itemnotaalmacen.estado == 3 %}
+                        Anulado
+                        {% endif %}</td>
                     <td style="text-align: center;">
                         <a href="{% url 'editarnotaAlmacen' itemnotaalmacen.idNotaAlmacen %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                         <a href="#" onclick="eliminarnotaAlmacen('{{itemnotaalmacen.idNotaAlmacen}}','{{itemnotaalmacen.codigo}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

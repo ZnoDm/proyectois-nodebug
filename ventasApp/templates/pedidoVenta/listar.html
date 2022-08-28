@@ -32,6 +32,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Código</th>
+                        <th>Documento</th>
                         <th>Fecha Emisión</th>
                         <th>Fecha Entrega</th>
                         <th>Moneda</th>
@@ -47,6 +48,7 @@
                 <tr>
                     <td>{{ itempedidoventa.idPedidoVenta}}</td>
                     <td>{{ itempedidoventa.codigo }}</td>
+                    <td>{{ itempedidoventa.tipoDocumento }}</td>
                     <td>{{ itempedidoventa.fechaEmision|date:"d/m/Y" }}</td>
                     <td>{{ itempedidoventa.fechaEntrega|date:"d/m/Y" }}</td>
                     <td>{{ itempedidoventa.tipoMoneda }}</td>
