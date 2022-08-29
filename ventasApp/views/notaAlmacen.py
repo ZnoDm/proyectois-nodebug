@@ -87,8 +87,13 @@ def editarnotaAlmacen(request,id):
             return redirect("listarnotaAlmacen") 
     else:
         form=NotaAlmacenForm(instance=notaAlmacen)
-        pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=notaAlmacen.pedidoVenta_id) 
-        context={"form":form,'id':pedidoVenta.idPedidoVenta} 
+        pedidoVenta_exits = (PedidoVenta.objects.filter(idPedidoVenta=notaAlmacen.pedidoVenta_id).count()>0)
+        if pedidoVenta_exits:
+            pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=notaAlmacen.pedidoVenta_id)
+            context={"form":form,'id':pedidoVenta.idPedidoVenta} 
+        else :
+            ordenCompra=OrdenCompra.objects.get(idOrdenCompra=notaAlmacen.ordenCompra_id) 
+            context={"form":form,'id':ordenCompra.idOrdenCompra}
         return render(request,"notaAlmacen/edit.html",context)
 
 def eliminarnotaAlmacen(request,id):

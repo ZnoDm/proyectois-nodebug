@@ -165,6 +165,8 @@ class OrdenCompraForm(forms.ModelForm):
             'codigo': forms.TextInput(attrs={'readonly': True}),
             'fechaEmision': forms.TextInput(attrs={'type': 'date'}),
             'fechaEntrega': forms.TextInput(attrs={'type': 'date'}),
+            'tasaCambio':forms.NumberInput(attrs={'step': '0.01'}),
+            'tasaIgv': forms.NumberInput(attrs={'step': '0.01'})
         }
         
         

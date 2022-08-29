@@ -52,12 +52,20 @@ def agregarordenCompra(request):
                         subtotal = ordenCompra_subtotal,
                         descuento = ordenCompra_descuento,
                         total = ordenCompra_total,
-
+                        tipoDocumento = form['tipoDocumento'].value(),
                         usuarioRegistro = request.session['user_logged']
                     )
         ordenCompra.save()
         element = OrdenCompra.objects.all().last()
-
+        cantidadD = OrdenCompra.objects.count()
+        documentoOrdenCompra = DocumentoCompra.objects.create(
+                        ordenCompra = element,
+                        serie = '00',
+                        numero = str(cantidadD+1),
+                        tipoDocumento = form['tipoDocumento'].value(),
+                        usuarioRegistro = request.session['user_logged']
+                    )
+        documentoOrdenCompra.save()
         for p in arregloObjetoProductos:
             detalle = DetalleOrdenCompra(
                 ordenCompra = element,
@@ -73,7 +81,9 @@ def agregarordenCompra(request):
         return redirect("listarordenCompra") 
     
     else:
-        form=OrdenCompraForm(initial={'tasaIgv': 0.18,'tasaCambio': 0})
+        cantidad = OrdenCompra.objects.count()
+        form=OrdenCompraForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('PV-') + str(cantidad+1)})
+        form.fields["proveedor"].choices = [(r['idProveedor'],str(r['ruc']) +' '+ str(r['razonSocial'])) for r in Proveedor.objects.exclude(eliminado=1).values()]
         context={'form':form,'list_product':list_product} 
         return render(request,"ordenCompra/agregar.html",context) 
 
@@ -89,16 +99,103 @@ def listarordenCompra(request):
     return render(request,"ordenCompra/listar.html",{'page_obj': page_obj})
 
 def editarordenCompra(request,id):
+    list_product = Producto.objects.all().filter(eliminado=False).values()
     ordenCompra=OrdenCompra.objects.get(idOrdenCompra=id)
     if request.method=="POST":
-        form=OrdenCompraForm(request.POST,instance=ordenCompra)
-        if form.is_valid():
-            messages.success(request, "Orden actualizada.")
-            form.save() 
-            return redirect("listarordenCompra") 
+        form=OrdenCompraForm(request.POST)
+
+        arregloObjetoProductos = []  
+        ordenCompra_subtotal = 0.0
+        ordenCompra_descuento = 0.0
+        ordenCompra_total = 0.0
+
+        arregloProductosEliminados = [] 
+        idDetalleEliminado = request.POST.getlist('idDetalleEliminado[]')
+        idDetalle = request.POST.getlist('idDetalle[]')
+        idProducto = request.POST.getlist('idProducto[]')
+        idCantidad = request.POST.getlist('idCantidad[]')
+        idPrecioUnitario = request.POST.getlist('idPrecioUnitario[]')
+        idDescuentoUnitario = request.POST.getlist('idDescuentoUnitario[]')
+        idPrecioProductoTotal = request.POST.getlist('idPrecioProductoTotal[]')
+        j=0
+        while(j<len(idDetalleEliminado)):
+            arregloProductosEliminados.append({
+                'Detalle':idDetalleEliminado[j]
+            })
+            j+=1
+
+        i=0
+        while i<len(idProducto):
+            ordenCompra_subtotal = ordenCompra_subtotal+(float(idCantidad[i])*float(idPrecioUnitario[i]))
+            ordenCompra_descuento = ordenCompra_descuento+float(idDescuentoUnitario[i])
+            ordenCompra_total = ordenCompra_total+float(idPrecioProductoTotal[i])
+
+            arregloObjetoProductos.append({
+                'Detalle':idDetalle[i],
+                'Producto':idProducto[i],
+                'Cantidad':idCantidad[i],
+                'PrecioUnitario':idPrecioUnitario[i],
+                'DescuentoUnitario':idDescuentoUnitario[i],
+                'PrecioProductoTotal':idPrecioProductoTotal[i],
+            })
+            i+=1
+
+        for z in arregloProductosEliminados:
+            detalle = DetalleOrdenCompra.objects.get(idDetalleOrdenCompra=z['Detalle'])
+            detalle.usuarioEliminacion = request.session['user_logged']
+            detalle.fechaEliminacion = datetime.datetime.now()
+            detalle.eliminado = True
+            detalle.save()
+
+        for p in arregloObjetoProductos:
+            if p['Detalle'] == 0:
+                detalle = DetalleOrdenCompra(
+                    ordenCompra = ordenCompra,
+                    producto= Producto.objects.get(idProducto=p['Producto']), 
+                    cantidad=p['Cantidad'],
+                    precioUnitario=p['PrecioUnitario'],
+                    descuentoUnitario=p['DescuentoUnitario'],
+                    precio=p['PrecioProductoTotal'],
+                    usuarioRegistro = request.session['user_logged']
+                )
+                detalle.save()
+            else:
+                detalle = DetalleOrdenCompra.objects.get(idDetalleOrdenCompra=p['Detalle'])
+                detalle.cantidad=p['Cantidad']
+                detalle.precioUnitario=p['PrecioUnitario']
+                detalle.descuentoUnitario=p['DescuentoUnitario']
+                detalle.precio=p['PrecioProductoTotal']
+                detalle.usuarioModificacion = request.session['user_logged']
+                detalle.fechaModificacion = datetime.datetime.now()
+                detalle.save()
+        
+        ordenCompra.trabajador = Trabajador.objects.get(idTrabajador=form['trabajador'].value())
+        ordenCompra.cliente = Cliente.objects.get(idCliente=form['cliente'].value())
+        ordenCompra.formaPago = FormaPago.objects.get(idFormaPago=form['formaPago'].value())
+        ordenCompra.fechaEmision = form['fechaEmision'].value()
+        ordenCompra.fechaEntrega =  form['fechaEntrega'].value()
+        ordenCompra.tipoMoneda = form['tipoMoneda'].value()
+        ordenCompra.tasaCambio = form['tasaCambio'].value()
+        ordenCompra.tasaIgv = form['tasaIgv'].value()
+        ordenCompra.estado = form['estado'].value()
+        ordenCompra.tipoDocumento = form['tipoDocumento'].value()
+        ordenCompra.subtotal = ordenCompra_subtotal
+        ordenCompra.descuento = ordenCompra_descuento
+        ordenCompra.total = ordenCompra_total
+        
+        ordenCompra.usuarioModificacion = request.session['user_logged']
+        ordenCompra.fechaModificacion = datetime.datetime.now()
+        ordenCompra.save()
+        documento = DocumentoCompra.objects.get(ordenCompra=ordenCompra)
+        documento.tipoDocumento = form['tipoDocumento'].value()
+        documento.save()
+        messages.success(request, "Orden de compra actualizada.")
+        
+        return redirect("listarordenCompra")  
     else:
         form=OrdenCompraForm(instance=ordenCompra)
-        context={"form":form} 
+        form.fields["proveedor"].choices = [(r['idProveedor'],str(r['ruc']) +' '+str(r['razonSocial'])) for r in Proveedor.objects.exclude(eliminado=1).values()]
+        context={"form":form,'list_product':list_product,'ordenCompra':ordenCompra,'id':id} 
         return render(request,"ordenCompra/edit.html",context)
 
 def eliminarordenCompra(request,id):

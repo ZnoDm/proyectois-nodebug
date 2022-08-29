@@ -207,7 +207,6 @@ TIPODOCUMENTO  = (
 #========= FIN TIPODOCUMENTO  =============
 class PedidoVenta(models.Model):
     idPedidoVenta = models.AutoField(primary_key=True)
-
     trabajador = models.ForeignKey(Trabajador, on_delete = models.CASCADE)
     cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE)
     formaPago = models.ForeignKey(FormaPago, on_delete = models.CASCADE)
@@ -327,6 +326,7 @@ class DetalleOrdenCompra(models.Model):
 
     cantidad = models.IntegerField()
     precioUnitario = models.FloatField()
+
     descuentoUnitario = models.FloatField()
     precio = models.FloatField()
 
@@ -376,7 +376,7 @@ class NotaAlmacen(models.Model):
     fechaEliminacion = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.idNotaAlmacen
+        return self
 
 class DetalleNotaAlmacen(models.Model):
     idDetalleNotaAlmacen = models.AutoField(primary_key=True)    
@@ -431,7 +431,7 @@ class DocumentoCompra(models.Model):
     serie = models.CharField(max_length=20) 
     numero = models.CharField(max_length=20)
     
-    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=FACTURA)
+    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default='FACTURA')
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')

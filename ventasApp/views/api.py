@@ -75,7 +75,7 @@ def get_dataDona(request,*args,**kwargs):
 
 
 
-def obtenerDetalle(request,*args,**kwargs):
+def obtenerDetallePedidoVenta(request,*args,**kwargs):
     list_detalle = []
     pedidoVenta=PedidoVenta.objects.get(idPedidoVenta=kwargs['id'])
     listado = DetallePedidoVenta.objects.all().filter(pedidoVenta=pedidoVenta).filter(eliminado=False).values()
@@ -107,6 +107,80 @@ def obtenerDetalle(request,*args,**kwargs):
     
     return JsonResponse(data)
 
+
+def obtenerDetalleOrdenCompra(request,*args,**kwargs):
+    list_detalle = []
+    ordenCompra=OrdenCompra.objects.get(idOrdenCompra=kwargs['id'])
+    listado = DetalleOrdenCompra.objects.all().filter(ordenCompra=ordenCompra).filter(eliminado=False).values()
+    for t in listado:  
+        producto=Producto.objects.get(idProducto=t['producto_id'])      
+        list_detalle.append({
+            'detalle_id': t['idDetalleOrdenCompra'],
+            'producto_id':producto.idProducto,
+            'stock':producto.stock,
+            'codigo':producto.codigo,
+            'descripcion':producto.descripcion,
+            'cantidad':t['cantidad'],
+            'precioUnitario':t['precioUnitario'],
+            'descuentoUnitario':t['descuentoUnitario'],
+            'precio':t['precio'],
+        })
+    proveedor = Proveedor.objects.get(idProveedor=ordenCompra.proveedor_id)
+    documento = DocumentoCompra.objects.get(ordenCompra=ordenCompra)
+    data={
+        'idPedidoVenta':ordenCompra.idOrdenCompra,
+        'tasaIgv':ordenCompra.tasaIgv,
+        'serie':documento.serie,
+        'numero':documento.numero,
+        'subtotal':ordenCompra.subtotal,
+        'descuento':ordenCompra.descuento,
+        'total':ordenCompra.total,
+        'detalle':list_detalle
+    }
+    
+    return JsonResponse(data)
+
+def obtenerTipoNotaAlmacen(request,*args,**kwargs):
+    notaAlmacen=NotaAlmacen.objects.get(idNotaAlmacen=kwargs['id'])
+    if notaAlmacen.ordenCompra_id != None:
+        tipo = 1
+    else :
+        tipo = 2
+
+    data={
+        'tipo': tipo
+    }
+    return JsonResponse(data)    
+
+def obtenerDetalleNotaAlmacen(request,*args,**kwargs):
+    
+    list_detalle = []
+    notaAlmacen=NotaAlmacen.objects.get(idNotaAlmacen=kwargs['id'])
+    listado = DetalleNotaAlmacen.objects.all().filter(notaAlmacen=notaAlmacen).filter(eliminado=False).values()
+    for t in listado:  
+        producto=Producto.objects.get(idProducto=t['producto_id'])      
+        list_detalle.append({
+            'detalle_id': t['idDetalleNotaAlmacen'],
+            'producto_id':producto.idProducto,
+            'stock':producto.stock,
+            'codigo':producto.codigo,
+            'descripcion':producto.descripcion,
+            'cantidad':t['cantidad'],
+            'precioUnitario':t['precioUnitario'],
+            'descuentoUnitario':t['descuentoUnitario'],
+            'precio':t['precio'],
+        })
+    data={
+        'idPedidoVenta':notaAlmacen.idNotaAlmacen,
+        'subtotal':notaAlmacen.subtotal,
+        'descuento':notaAlmacen.descuento,
+        'total':notaAlmacen.total,
+        'detalle':list_detalle
+    }
+    
+    return JsonResponse(data)
+
+
 def obtenerCliente(request,*args,**kwargs):
     cliente = Cliente.objects.get(idCliente=kwargs['id'])
 
@@ -114,6 +188,17 @@ def obtenerCliente(request,*args,**kwargs):
         'idCliente':cliente.idCliente,
         'tipoDocumentoIdentidad':cliente.tipoDocumentoIdentidad,
         'documentoIdentidad':cliente.documentoIdentidad,
+    }
+    
+    return JsonResponse(data)
+
+def obtenerProveedor(request,*args,**kwargs):
+    proveedor = Proveedor.objects.get(idProveedor=kwargs['id'])
+
+    data={
+        'idProveedor':proveedor.idCliente,
+        'ruc':proveedor.ruc,
+        'razonSocial':proveedor.razonSocial,
     }
     
     return JsonResponse(data)
