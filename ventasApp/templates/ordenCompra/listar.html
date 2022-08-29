@@ -35,11 +35,11 @@
                         <th>Fecha Emisión</th>
                         <th>Fecha Entrega</th>
                         <th>Moneda</th>
-                        <th>Tasa de Cambio</th>
                         <th>Subtotal</th>
                         <th>IGV</th>
                         <th>Descuento</th>
                         <th>Total</th>
+                        <th>Estado</th>
                         <th><center>Opciones</center></th>
                     </tr>
                 </thead>
@@ -48,14 +48,22 @@
                 <tr>
                     <td>{{ itemordencompra.idOrdenCompra}}</td>
                     <td>{{ itemordencompra.codigo }}</td>
-                    <td>{{ itemordencompra.fechaEmision }}</td>
-                    <td>{{ itemordencompra.fechaEntrega }}</td>
+                    <td>{{ itemordencompra.fechaEmision|date:"d/m/Y"  }}</td>
+                    <td>{{ itemordencompra.fechaEntrega|date:"d/m/Y"  }}</td>
                     <td>{{ itemordencompra.tipoMoneda }}</td>
-                    <td>{{ itemordencompra.tasaCambio }}</td>
                     <td>{{ itemordencompra.subtotal }}</td>
                     <td>{{ itemordencompra.tasaIgv }}</td>
                     <td>{{ itemordencompra.descuento }}</td>
                     <td>{{ itemordencompra.total }}</td>
+                    <td>{% if itemordencompra.estado == 1 %}
+                        Abierto
+                        {% endif %}
+                        {% if itemordencompra.estado == 2 %}
+                        Cerrado
+                        {% endif %}
+                        {% if itemordencompra.estado == 3 %}
+                        Anulado
+                        {% endif %}</td>
                     <td style="text-align: center;">
                         <a href="{% url 'editarordenCompra' itemordencompra.idOrdenCompra %}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                         <a href="#" onclick="eliminarordenCompra('{{itemordencompra.idOrdenCompra}}','{{itemordencompra.codigo}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

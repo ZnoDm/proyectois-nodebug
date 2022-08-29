@@ -295,7 +295,7 @@ class OrdenCompra(models.Model):
 
     fechaEmision = models.DateField()
     fechaEntrega = models.DateField()
-    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=BOLETA)
+    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=FACTURA)
     tipoMoneda= models.CharField(max_length=50,choices=TIPOMONEDA, default=SOLES)
     tasaCambio = models.FloatField()
 
@@ -431,7 +431,7 @@ class DocumentoCompra(models.Model):
     serie = models.CharField(max_length=20) 
     numero = models.CharField(max_length=20)
     
-    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default='FACTURA')
+    tipoDocumento = models.CharField(max_length=20,choices=TIPODOCUMENTO, default=FACTURA)
 
     eliminado = models.BooleanField(default= False)
     usuarioRegistro = models.CharField(max_length=300,default='admin')

@@ -114,6 +114,8 @@
     </script>
     <script>  
         const onChangeDetalleVenta  = (id)=>{
+            
+            document.getElementById('tableProductos').innerHTML = '';
             document.getElementById('id_tipoOperacion').value = "SALIDA";
             let endpointCompras = '/api/get_detallePedidoVenta/'+id+'/'
             $.ajax({
@@ -132,7 +134,7 @@
                     
                         fila = '<tr id="filaP'+(indice)+'">'
                         
-                        fila +=     '<td><input class="form-control" type="hidden" name="idProducto[]" value="'+data.detalle[index].producto_id+'">'+data.detalle[index].codigo+'</td>'
+                        fila +=     '<td><input class="form-control" type="hidden" name="idProducto[]" value="'+data.detalle[index].producto_id +'">'+data.detalle[index].codigo+'</td>'
                         
                         fila +=     '<td><input class="form-control" id="filaDetalleP'+(indice)+'" type="hidden" name="idDetalle[]" value="'+data.detalle[index].detalle_id+'">'+data.detalle[index].descripcion+'</td>'
 
@@ -164,7 +166,9 @@
 
     <script>  
         const onChangeOrdenCompra  = (id)=>{
-            document.getElementById('id_tipoOperacion').value = "SALIDA";
+            
+            document.getElementById('tableProductos').innerHTML = '';
+            document.getElementById('id_tipoOperacion').value = "ENTRADA";
             let endpointCompras = '/api/get_detalleOrdenCompra/'+id+'/'
             $.ajax({
                 method:"GET",

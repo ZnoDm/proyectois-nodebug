@@ -208,7 +208,7 @@
                     alert('Ya ha seleccionado ese producto');
                 }
                 else{
-                    arrayIdProctuctos[indice] = op[0];
+                    arrayIdProctuctos[indice] = {id:op[0],estado:true};
                     
                     fila = '<tr id="filaP'+(indice)+'">'
                     
@@ -233,22 +233,25 @@
                     subtotal = 0;
                     descuento = 0;
                     for (let index = 0; index < arrayIdProctuctos.length; index++) {
-                        let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
-                        let cantidad = document.getElementById('filaCantidad'+index).value;
-                        let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
-                        document.getElementById('filaPrecio'+index).value = precio;
+                        if(arrayIdProctuctos[index].estado==true){
+                            
+                            let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
+                            let cantidad = document.getElementById('filaCantidad'+index).value;
+                            let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
+                            document.getElementById('filaPrecio'+index).value = precio;
+                            
+                            let descuento_unitario = document.getElementById('filaDescuentoUnitario'+index).value;
+                            let precioSinIgv = parseFloat(precio).toFixed(2)-parseFloat(descuento_unitario).toFixed(2)
+                            document.getElementById('filaPrecioSinIGV'+index).value = precioSinIgv;
                         
-                        let descuento_unitario = document.getElementById('filaDescuentoUnitario'+index).value;
-                        let precioSinIgv = parseFloat(precio).toFixed(2)-parseFloat(descuento_unitario).toFixed(2)
-                        document.getElementById('filaPrecioSinIGV'+index).value = precioSinIgv;
-                       
-                        let precio_total =parseFloat(precioSinIgv*1.0 + precioSinIgv*1.0*parseFloat(igv).toFixed(2)).toFixed(2); 
-                        document.getElementById('filaPrecioProductoTotal'+index).value = precio_total
-                        
-                        console.log(precio_total)
-                        subtotal = subtotal +precio;
-                        descuento = descuento + parseFloat(descuento_unitario).toFixed(2)*1.0;
-                        totales =  totales+ precio_total*1.0;
+                            let precio_total =parseFloat(precioSinIgv*1.0 + precioSinIgv*1.0*parseFloat(igv).toFixed(2)).toFixed(2); 
+                            document.getElementById('filaPrecioProductoTotal'+index).value = precio_total
+                            
+                            console.log(precio_total)
+                            subtotal = subtotal +precio;
+                            descuento = descuento + parseFloat(descuento_unitario).toFixed(2)*1.0;
+                            totales =  totales+ precio_total*1.0;
+                        }
                          
                     }
                     let tasaCambio = document.getElementById('id_tasaCambio').value;
@@ -271,22 +274,24 @@
             subtotal = 0;
             descuento = 0;
             for (let index = 0; index < arrayIdProctuctos.length; index++) {
-                let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
-                let cantidad = document.getElementById('filaCantidad'+index).value;
-                let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
-                document.getElementById('filaPrecio'+index).value = precio;
-                
-                let descuento_unitario = document.getElementById('filaDescuentoUnitario'+index).value;
-                let precioSinIgv = parseFloat(precio).toFixed(2)-parseFloat(descuento_unitario).toFixed(2)
-                document.getElementById('filaPrecioSinIGV'+index).value = precioSinIgv;
-                
-                let precio_total =parseFloat(precioSinIgv*1.0 + precioSinIgv*1.0*parseFloat(igv).toFixed(2)).toFixed(2); 
-                document.getElementById('filaPrecioProductoTotal'+index).value = precio_total
-                
-                console.log(precio_total)
-                subtotal = subtotal +precio;
-                descuento = descuento + parseFloat(descuento_unitario).toFixed(2)*1.0;
-                totales =  totales+ precio_total*1.0;
+                if(arrayIdProctuctos[index].estado==true){
+                    let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
+                    let cantidad = document.getElementById('filaCantidad'+index).value;
+                    let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
+                    document.getElementById('filaPrecio'+index).value = precio;
+                    
+                    let descuento_unitario = document.getElementById('filaDescuentoUnitario'+index).value;
+                    let precioSinIgv = parseFloat(precio).toFixed(2)-parseFloat(descuento_unitario).toFixed(2)
+                    document.getElementById('filaPrecioSinIGV'+index).value = precioSinIgv;
+                    
+                    let precio_total =parseFloat(precioSinIgv*1.0 + precioSinIgv*1.0*parseFloat(igv).toFixed(2)).toFixed(2); 
+                    document.getElementById('filaPrecioProductoTotal'+index).value = precio_total
+                    
+                    console.log(precio_total)
+                    subtotal = subtotal +precio;
+                    descuento = descuento + parseFloat(descuento_unitario).toFixed(2)*1.0;
+                    totales =  totales+ precio_total*1.0;
+                }
                     
             }
             let tasaCambio = document.getElementById('id_tasaCambio').value;
@@ -300,11 +305,12 @@
         const quitarProducto =(i)=>
         {
             document.getElementById('filaP'+i).remove();
+            arrayIdProctuctos[i].estado = false; 
             let totales = 0;
             let subtotal = 0;
             let descuento = 0;
             for (let index = 0; index < arrayIdProctuctos.length; index++) {
-                if(document.getElementById('filaPrecioUnitario'+index)!== null){
+                if(arrayIdProctuctos[index].estado==true){
                         let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
                         let descuento_unitario = document.getElementById('filaDescuentoUnitario'+index).value;
                         let cantidad = document.getElementById('filaCantidad'+index).value;
@@ -313,8 +319,8 @@
                         subtotal = subtotal + parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad);
                         descuento = descuento + parseFloat(descuento_unitario).toFixed(2)*1.0;
                         totales =  totales+ parseFloat(precio_total).toFixed(2)*1.0;
-                    }
                 }
+            }
             console.log(totales);
             document.getElementById('sub-total').innerHTML=parseFloat(subtotal).toFixed(2);
             document.getElementById('descuento').innerHTML=parseFloat(descuento).toFixed(2);

@@ -61,7 +61,7 @@ def agregarnotaAlmacen(request):
         return redirect("listarnotaAlmacen")
     
     else:
-        cantidad = PedidoVenta.objects.count()
+        cantidad = NotaAlmacen.objects.count()
         form=NotaAlmacenForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'codigo': str('NT-') + str(cantidad+1)})
         context={'form':form} 
         return render(request,"notaAlmacen/agregar.html",context) 

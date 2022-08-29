@@ -82,7 +82,7 @@ def agregarordenCompra(request):
     
     else:
         cantidad = OrdenCompra.objects.count()
-        form=OrdenCompraForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('PV-') + str(cantidad+1)})
+        form=OrdenCompraForm(initial={'fechaEmision':datetime.datetime.now().strftime("%Y-%m-%d"),'fechaEntrega':datetime.datetime.now().strftime("%Y-%m-%d"),'tasaIgv': 0.18,'tasaCambio': 0,'codigo': str('OC-') + str(cantidad+1)})
         form.fields["proveedor"].choices = [(r['idProveedor'],str(r['ruc']) +' '+ str(r['razonSocial'])) for r in Proveedor.objects.exclude(eliminado=1).values()]
         context={'form':form,'list_product':list_product} 
         return render(request,"ordenCompra/agregar.html",context) 
@@ -170,7 +170,7 @@ def editarordenCompra(request,id):
                 detalle.save()
         
         ordenCompra.trabajador = Trabajador.objects.get(idTrabajador=form['trabajador'].value())
-        ordenCompra.cliente = Cliente.objects.get(idCliente=form['cliente'].value())
+        ordenCompra.proveedor = Proveedor.objects.get(idProveedor=form['proveedor'].value())
         ordenCompra.formaPago = FormaPago.objects.get(idFormaPago=form['formaPago'].value())
         ordenCompra.fechaEmision = form['fechaEmision'].value()
         ordenCompra.fechaEntrega =  form['fechaEntrega'].value()
