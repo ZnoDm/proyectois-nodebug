@@ -154,11 +154,7 @@
         });
     </script>
     <script>
-        const actualizarMontos =()=>{
-            
-            let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
-                     
-            }
+        
             
     </script>
     <script>   
@@ -166,6 +162,16 @@
 
         let arrayIdProctuctos=[];
         let arrayDetalleEliminado=[];
+
+        const actualizarMontos =()=>{
+            for (let index = 0; index < arrayIdProctuctos.length; index++) {
+                let precio_unitario = document.getElementById('filaPrecioUnitario'+index).value;
+                let cantidad = document.getElementById('filaCantidad'+index).value;
+                let precio = parseFloat(precio_unitario).toFixed(2)*parseFloat(cantidad).toFixed(2);
+                document.getElementById('filaPrecio'+index).value = precio;       
+            }
+        }
+
         const agregarTabla = ()=>{
             op = document.getElementById('productoSelected').value.split('_');
             let cantidadSelected =  document.getElementById('cantidadSelected').value
